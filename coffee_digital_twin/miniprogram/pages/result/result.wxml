@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="section">
+    <view class="section-title">模型结果</view>
+    <view class="muted">task: {{taskId || '暂无'}}</view>
+  </view>
+
+  <loading-panel wx:if="{{loading}}" text="读取模型结果"></loading-panel>
+
+  <block wx:elif="{{!taskId}}">
+    <view class="panel muted">还没有模型任务，请先到情景模拟页面运行一次。</view>
+  </block>
+
+  <block wx:else>
+    <view class="section grid-2">
+      <view class="grid-item card-wrap">
+        <status-card label="生育期" value="{{result.dashboard.stage || '-'}}" sub="APSIM"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="预计亩产" value="{{result.dashboard.yield_pred_kg_mu || '-'}} kg" sub="APSIM"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="根系吸水" value="{{rootUptake}}" sub="HYDRUS"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="生态碳汇" value="{{result.beps.carbon_sink_kgC_mu || '-'}} kgC/亩" sub="BEPS"></status-card>
+      </view>
+    </view>
+
+    <view class="section panel result-head">
+      <view>
+        <view class="section-title small">综合风险</view>
+        <view class="muted">{{result.hydrus.water_status}} · {{result.beps.canopy_status}}</view>
+      </view>
+      <risk-badge risk="{{result.dashboard.risk_level || '低'}}"></risk-badge>
+    </view>
+
+    <view class="section">
+      <chart-card title="APSIM 产量预测" unit="kg/亩" items="{{yieldItems}}"></chart-card>
+    </view>
+    <view class="section">
+      <chart-card title="HYDRUS 土壤剖面水分" unit="" items="{{soilItems}}"></chart-card>
+    </view>
+    <view class="section">
+      <chart-card title="BEPS GPP" unit="" items="{{gppItems}}"></chart-card>
+    </view>
+    <view class="section">
+      <chart-card title="BEPS NPP" unit="" items="{{nppItems}}"></chart-card>
+    </view>
+    <view class="section">
+      <chart-card title="BEPS ET" unit="mm" items="{{etItems}}"></chart-card>
+    </view>
+
+    <button class="primary-btn" bindtap="goAdvice">查看AI农技建议</button>
+  </block>
+</view>

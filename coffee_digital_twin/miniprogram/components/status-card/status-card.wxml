@@ -1,0 +1,5 @@
+<view class="status-card">
+  <view class="label">{{label}}</view>
+  <view class="value">{{value}}</view>
+  <view wx:if="{{sub}}" class="sub">{{sub}}</view>
+</view>

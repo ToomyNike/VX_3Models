@@ -1,0 +1,27 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 128rpx;
+  height: 48rpx;
+  border-radius: 8rpx;
+  padding: 0 18rpx;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.risk-low {
+  color: #1f5a3a;
+  background: #e4f2e9;
+}
+
+.risk-medium {
+  color: #8a5a00;
+  background: #fff1cc;
+}
+
+.risk-high {
+  color: #a02828;
+  background: #ffe0df;
+}

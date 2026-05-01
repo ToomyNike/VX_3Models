@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="section">
+    <view class="section-title">建园初始化</view>
+    <view class="muted">录入地块基础信息，用于生成三模型统一输入</view>
+  </view>
+
+  <form bindsubmit="submit">
+    <view class="panel">
+      <view class="field">
+        <text class="field-label">咖啡园名称</text>
+        <input class="input" name="plot_name" value="{{form.plot_name}}" />
+      </view>
+      <view class="field">
+        <text class="field-label">品种</text>
+        <input class="input" name="coffee_variety" value="{{form.coffee_variety}}" />
+      </view>
+      <view class="grid-2">
+        <view class="field">
+          <text class="field-label">面积 亩</text>
+          <input class="input" name="area_mu" type="digit" value="{{form.area_mu}}" />
+        </view>
+        <view class="field">
+          <text class="field-label">树龄 年</text>
+          <input class="input" name="tree_age" type="number" value="{{form.tree_age}}" />
+        </view>
+      </view>
+      <view class="grid-2">
+        <view class="field">
+          <text class="field-label">纬度</text>
+          <input class="input" name="latitude" type="digit" value="{{form.latitude}}" />
+        </view>
+        <view class="field">
+          <text class="field-label">经度</text>
+          <input class="input" name="longitude" type="digit" value="{{form.longitude}}" />
+        </view>
+      </view>
+      <view class="grid-2">
+        <view class="field">
+          <text class="field-label">海拔 m</text>
+          <input class="input" name="elevation_m" type="digit" value="{{form.elevation_m}}" />
+        </view>
+        <view class="field">
+          <text class="field-label">土壤类型</text>
+          <input class="input" name="soil_type" value="{{form.soil_type}}" />
+        </view>
+      </view>
+      <view class="field">
+        <text class="field-label">遮阴程度</text>
+        <input class="input" name="shade_level" value="{{form.shade_level}}" />
+      </view>
+      <view class="grid-2">
+        <view class="field">
+          <text class="field-label">种植密度 株/亩</text>
+          <input class="input" name="plant_density" type="digit" value="{{form.plant_density}}" />
+        </view>
+        <view class="field">
+          <text class="field-label">行距 m</text>
+          <input class="input" name="row_spacing_m" type="digit" value="{{form.row_spacing_m}}" />
+        </view>
+      </view>
+      <view class="field">
+        <text class="field-label">株距 m</text>
+        <input class="input" name="plant_spacing_m" type="digit" value="{{form.plant_spacing_m}}" />
+      </view>
+    </view>
+
+    <button class="primary-btn submit" form-type="submit" loading="{{saving}}">保存建园信息</button>
+  </form>
+</view>

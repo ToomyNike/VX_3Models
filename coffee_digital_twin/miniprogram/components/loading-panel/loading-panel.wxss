@@ -1,0 +1,19 @@
+.loading-panel {
+  min-height: 140rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  color: #365b43;
+  background: #ffffff;
+  border: 1rpx solid #dfe7df;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: #2f7d50;
+}

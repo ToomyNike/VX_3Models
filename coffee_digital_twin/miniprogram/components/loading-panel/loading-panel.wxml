@@ -1,0 +1,4 @@
+<view class="loading-panel">
+  <view class="dot"></view>
+  <view>{{text}}</view>
+</view>

@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="section">
+    <view class="section-title">情景模拟</view>
+    <view class="muted">选择一个管理方案，后端会生成统一输入并调用三模型</view>
+  </view>
+
+  <loading-panel wx:if="{{running}}" text="三模型运行中"></loading-panel>
+
+  <block wx:else>
+    <view class="section">
+      <view
+        wx:for="{{scenarios}}"
+        wx:key="name"
+        data-index="{{index}}"
+        bindtap="choose"
+        class="scenario {{selected == index ? 'active' : ''}}"
+      >
+        <view class="scenario-title">{{item.name}}</view>
+        <view class="muted">{{item.note}}</view>
+        <view class="meta">补水 {{item.extra_irrigation_mm}} mm · 追肥 {{item.extra_fertilizer_kg_mu}} kg/亩</view>
+      </view>
+    </view>
+
+    <button class="primary-btn" bindtap="runModel">运行三模型</button>
+  </block>
+</view>

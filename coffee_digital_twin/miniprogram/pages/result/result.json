@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "模型结果",
+  "usingComponents": {
+    "status-card": "/components/status-card/status-card",
+    "risk-badge": "/components/risk-badge/risk-badge",
+    "chart-card": "/components/chart-card/chart-card",
+    "loading-panel": "/components/loading-panel/loading-panel"
+  }
+}

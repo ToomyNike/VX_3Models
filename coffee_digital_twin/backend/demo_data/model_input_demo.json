@@ -1,0 +1,48 @@
+{
+  "task_id": "task_demo",
+  "plot_id": "plot_001",
+  "crop": "coffee",
+  "plot_info": {
+    "plot_name": "潞江坝咖啡示范园",
+    "area_mu": 12.5,
+    "tree_age": 4,
+    "coffee_variety": "云南小粒咖啡",
+    "latitude": 24.93,
+    "longitude": 98.88,
+    "elevation_m": 850,
+    "soil_type": "赤红壤",
+    "shade_level": "中等遮阴"
+  },
+  "weather_series": [
+    {
+      "date": "2026-04-29",
+      "tmax": 30.2,
+      "tmin": 18.6,
+      "tavg": 24.5,
+      "rain_mm": 0,
+      "radiation_mj": 18.5,
+      "vpd_kpa": 1.2,
+      "wind_m_s": 1.5
+    }
+  ],
+  "farm_operations": [
+    {
+      "op_type": "irrigation",
+      "date": "2026-04-29",
+      "amount": 25,
+      "unit": "mm"
+    },
+    {
+      "op_type": "fertilization",
+      "date": "2026-04-29",
+      "fertilizer_type": "尿素",
+      "amount": 10,
+      "unit": "kg/mu"
+    }
+  ],
+  "scenario": {
+    "scenario_name": "当前管理方案",
+    "extra_irrigation_mm": 0,
+    "extra_fertilizer_kg_mu": 0
+  }
+}

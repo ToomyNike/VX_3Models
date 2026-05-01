@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "情景模拟",
+  "usingComponents": {
+    "loading-panel": "/components/loading-panel/loading-panel"
+  }
+}

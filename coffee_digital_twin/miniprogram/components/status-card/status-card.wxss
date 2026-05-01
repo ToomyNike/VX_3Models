@@ -1,0 +1,26 @@
+.status-card {
+  min-height: 160rpx;
+  background: #ffffff;
+  border: 1rpx solid #dfe7df;
+  border-radius: 8rpx;
+  padding: 22rpx;
+  box-sizing: border-box;
+}
+
+.label {
+  color: #68756c;
+  font-size: 24rpx;
+}
+
+.value {
+  margin-top: 12rpx;
+  color: #183927;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.sub {
+  margin-top: 8rpx;
+  color: #68756c;
+  font-size: 24rpx;
+}

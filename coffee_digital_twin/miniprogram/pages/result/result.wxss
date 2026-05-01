@@ -1,0 +1,15 @@
+.result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.small {
+  margin: 0 0 8rpx;
+  font-size: 30rpx;
+}
+
+.card-wrap {
+  margin-bottom: 18rpx;
+}

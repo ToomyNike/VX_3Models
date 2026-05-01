@@ -1,0 +1,11 @@
+backend/database/*.db
+backend/runtime/*/*
+!backend/runtime/*/.gitkeep
+server/logs/*
+!server/logs/.gitkeep
+server/backup/demo_video_data/*
+!server/backup/demo_video_data/.gitkeep
+server/backup/final_result_json/*
+!server/backup/final_result_json/.gitkeep
+__pycache__/
+*.pyc

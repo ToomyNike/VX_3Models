@@ -1,0 +1,10 @@
+{
+  "weather_series": [
+    {
+      "date": "2026-04-29",
+      "radiation_mj": 18.5,
+      "tavg": 24.5,
+      "rain_mm": 0
+    }
+  ]
+}

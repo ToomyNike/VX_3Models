@@ -1,0 +1,58 @@
+{
+  "model": "BEPS-Lite",
+  "status": "success",
+  "plot_id": "plot_001",
+  "growth_score": 78.5,
+  "canopy_status": "长势正常但受轻度水分限制",
+  "gpp_today": 8.6,
+  "npp_today": 4.1,
+  "et_today": 3.2,
+  "carbon_sink_kgC_mu": 1.93,
+  "beps_risk": "中等",
+  "gpp_series": [
+    {
+      "date": "2026-04-29",
+      "gpp": 8.6
+    },
+    {
+      "date": "2026-04-30",
+      "gpp": 8.2
+    },
+    {
+      "date": "2026-05-01",
+      "gpp": 7.9
+    }
+  ],
+  "npp_series": [
+    {
+      "date": "2026-04-29",
+      "npp": 4.1
+    },
+    {
+      "date": "2026-04-30",
+      "npp": 3.9
+    },
+    {
+      "date": "2026-05-01",
+      "npp": 3.7
+    }
+  ],
+  "et_series": [
+    {
+      "date": "2026-04-29",
+      "et": 3.2
+    },
+    {
+      "date": "2026-04-30",
+      "et": 3.4
+    },
+    {
+      "date": "2026-05-01",
+      "et": 3.6
+    }
+  ],
+  "beps_explain": {
+    "what": "当前咖啡园冠层光合生产力处于中等偏上水平。",
+    "why": "辐射条件较好，但土壤水分限制使GPP略有下降。"
+  }
+}

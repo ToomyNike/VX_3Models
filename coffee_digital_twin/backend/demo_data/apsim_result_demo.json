@@ -1,0 +1,31 @@
+{
+  "model": "APSIM-Coffee",
+  "status": "success",
+  "plot_id": "plot_001",
+  "stage": "果实膨大期",
+  "harvest_days": 45,
+  "yield_pred_kg_mu": 1350,
+  "yield_change_kg_mu": 150,
+  "water_stress": 0.32,
+  "nitrogen_status": "偏低",
+  "lai": 3.2,
+  "biomass_kg_ha": 6200,
+  "yield_curve": [
+    {
+      "date": "2026-04-29",
+      "yield_kg_mu": 1200
+    },
+    {
+      "date": "2026-05-06",
+      "yield_kg_mu": 1260
+    },
+    {
+      "date": "2026-05-13",
+      "yield_kg_mu": 1350
+    }
+  ],
+  "apsim_explain": {
+    "what": "咖啡处于果实膨大期，产量形成进入关键阶段。",
+    "why": "近期土壤水分下降，水分胁迫开始影响干物质积累。"
+  }
+}

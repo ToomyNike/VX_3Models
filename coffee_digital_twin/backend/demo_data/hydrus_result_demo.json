@@ -1,0 +1,50 @@
+{
+  "model": "HYDRUS-1D",
+  "status": "success",
+  "plot_id": "plot_001",
+  "water_status": "中度干旱",
+  "root_uptake_ratio": 0.72,
+  "irrigation_effect": "灌溉主要补充0-40cm土层",
+  "soil_profile_current": [
+    {
+      "depth_cm": 10,
+      "theta": 0.26
+    },
+    {
+      "depth_cm": 20,
+      "theta": 0.23
+    },
+    {
+      "depth_cm": 40,
+      "theta": 0.19
+    },
+    {
+      "depth_cm": 60,
+      "theta": 0.17
+    },
+    {
+      "depth_cm": 100,
+      "theta": 0.15
+    }
+  ],
+  "soil_moisture_series": [
+    {
+      "date": "2026-04-29",
+      "d10": 0.26,
+      "d20": 0.23,
+      "d40": 0.19,
+      "d60": 0.17
+    },
+    {
+      "date": "2026-04-30",
+      "d10": 0.25,
+      "d20": 0.23,
+      "d40": 0.2,
+      "d60": 0.18
+    }
+  ],
+  "hydrus_explain": {
+    "what": "当前表层土壤水分略有恢复，但40cm以下仍偏低。",
+    "why": "本次灌溉水主要集中在0-40cm，深层根区补水不足。"
+  }
+}

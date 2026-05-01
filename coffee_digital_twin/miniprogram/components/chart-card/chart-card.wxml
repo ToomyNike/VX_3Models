@@ -1,0 +1,11 @@
+<view class="chart-card">
+  <view class="title">{{title}}</view>
+  <view wx:if="{{items.length == 0}}" class="empty">暂无数据</view>
+  <view wx:for="{{items}}" wx:key="label" class="bar-row">
+    <view class="bar-label">{{item.label}}</view>
+    <view class="bar-track">
+      <view class="bar-fill" style="width: {{item.width}}%;"></view>
+    </view>
+    <view class="bar-value">{{item.value}}{{unit}}</view>
+  </view>
+</view>

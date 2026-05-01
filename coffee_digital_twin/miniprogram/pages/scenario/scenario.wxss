@@ -1,0 +1,24 @@
+.scenario {
+  margin-bottom: 18rpx;
+  padding: 24rpx;
+  background: #ffffff;
+  border: 1rpx solid #dfe7df;
+  border-radius: 8rpx;
+}
+
+.scenario.active {
+  border-color: #2f7d50;
+  background: #edf7f0;
+}
+
+.scenario-title {
+  color: #183927;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.meta {
+  margin-top: 12rpx;
+  color: #526057;
+  font-size: 24rpx;
+}

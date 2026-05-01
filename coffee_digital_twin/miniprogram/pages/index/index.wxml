@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="section">
+    <view class="title">咖啡数字孪生智能决策系统</view>
+    <view class="muted">微信小程序 + Flask + APSIM / HYDRUS / BEPS</view>
+  </view>
+
+  <view class="section connection connection-{{backendStatus}}">
+    <view class="connection-dot"></view>
+    <view>{{backendText}}</view>
+  </view>
+
+  <loading-panel wx:if="{{loading}}" text="读取仪表盘数据"></loading-panel>
+
+  <block wx:else>
+    <view class="section grid-2">
+      <view class="grid-item card-wrap">
+        <status-card label="当前生育期" value="{{dashboard.stage || '-'}}" sub="APSIM"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="采收倒计时" value="{{dashboard.harvest_days || '-'}} 天" sub="APSIM"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="预计亩产" value="{{dashboard.yield_pred_kg_mu || '-'}} kg" sub="APSIM"></status-card>
+      </view>
+      <view class="grid-item card-wrap">
+        <status-card label="长势评分" value="{{dashboard.growth_score || '-'}}" sub="BEPS"></status-card>
+      </view>
+    </view>
+
+    <view class="section panel">
+      <view class="row">
+        <view>
+          <view class="section-title small">综合风险</view>
+          <view class="muted">三模型融合判断</view>
+        </view>
+        <risk-badge risk="{{dashboard.risk_level || '低'}}"></risk-badge>
+      </view>
+    </view>
+
+    <view class="section panel">
+      <view class="section-title small">农技建议</view>
+      <view class="advice-line">{{advice.what}}</view>
+      <view class="advice-line">{{advice.how}}</view>
+    </view>
+
+    <view class="section grid-2">
+      <button class="ghost-btn" bindtap="goPlotInit">建园初始化</button>
+      <button class="ghost-btn" bindtap="goFarmLog">农事打卡</button>
+      <button class="primary-btn" bindtap="goScenario">运行模型</button>
+      <button class="ghost-btn" bindtap="goResult">查看结果</button>
+    </view>
+
+    <button class="primary-btn" bindtap="goAdvice">AI农技建议</button>
+  </block>
+</view>

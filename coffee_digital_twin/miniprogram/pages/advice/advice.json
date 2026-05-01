@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "AI农技建议",
+  "usingComponents": {
+    "loading-panel": "/components/loading-panel/loading-panel"
+  }
+}

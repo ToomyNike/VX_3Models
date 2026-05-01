@@ -1,0 +1,56 @@
+.chart-card {
+  background: #ffffff;
+  border: 1rpx solid #dfe7df;
+  border-radius: 8rpx;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.title {
+  margin-bottom: 18rpx;
+  color: #183927;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.empty {
+  color: #7a847d;
+  font-size: 26rpx;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  min-height: 58rpx;
+}
+
+.bar-label,
+.bar-value {
+  color: #526057;
+  font-size: 24rpx;
+}
+
+.bar-label {
+  width: 150rpx;
+}
+
+.bar-value {
+  width: 126rpx;
+  text-align: right;
+}
+
+.bar-track {
+  flex: 1;
+  height: 18rpx;
+  margin: 0 14rpx;
+  background: #edf2ee;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 18rpx;
+  min-width: 12rpx;
+  background: #2f7d50;
+  border-radius: 8rpx;
+}
