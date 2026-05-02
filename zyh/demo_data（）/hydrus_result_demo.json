@@ -1,0 +1,21 @@
+
+{
+  "model": "HYDRUS-1D",
+  "status": "success",
+  "plot_id": "plot_001",
+  "water_status": "中度干旱",
+  "root_uptake_ratio": 0.72,
+  "infiltration_depth_cm": 42,
+  "irrigation_effect": "灌溉水主要进入 0-40cm 根区",
+  "soil_profile_current": [
+    { "depth_cm": 10, "theta": 0.26, "status": "适宜" },
+    { "depth_cm": 20, "theta": 0.23, "status": "略低" },
+    { "depth_cm": 40, "theta": 0.19, "status": "偏低" },
+    { "depth_cm": 60, "theta": 0.17, "status": "偏低" },
+    { "depth_cm": 100, "theta": 0.14, "status": "干旱" }
+  ],
+  "soil_moisture_series": [
+    { "date": "2026-04-29", "d10": 0.26, "d20": 0.23, "d40": 0.19, "d60": 0.17 },
+    { "date": "2026-04-30", "d10": 0.25, "d20": 0.22, "d40": 0.18, "d60": 0.16 }
+  ]
+}
