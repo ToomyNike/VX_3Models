@@ -1,0 +1,65 @@
+{
+  "module": "BEPS-Lite",
+  "status": "ok",
+  "plot_id": "coffee_plot_001",
+  "input_summary": {
+    "lai": 2.7,
+    "ndvi": 0.68,
+    "shade_degree": 0.4,
+    "water_factor": 0.42,
+    "fpar": 0.724
+  },
+  "summary": {
+    "avg_gpp_gc_m2_day": 4.165,
+    "avg_npp_gc_m2_day": 1.874,
+    "avg_et_mm_day": 2.38,
+    "total_carbon_sink_kg_ha": 56.222,
+    "growth_score": 58.1,
+    "risk_level": "medium",
+    "risk_reasons": [
+      "根区水分限制明显，可能降低冠层光合生产力",
+      "综合长势评分偏低，建议检查水分、病虫害和遮阴状态"
+    ]
+  },
+  "series": [
+    {
+      "date": "2026-05-01",
+      "tmean": 21.65,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 4.18,
+      "npp_gc_m2_day": 1.881,
+      "et_mm_day": 2.395,
+      "carbon_sink_kg_ha_day": 18.811,
+      "growth_score": 58.09,
+      "risk_level": "medium"
+    },
+    {
+      "date": "2026-05-02",
+      "tmean": 22.2,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 4.489,
+      "npp_gc_m2_day": 2.02,
+      "et_mm_day": 2.57,
+      "carbon_sink_kg_ha_day": 20.2,
+      "growth_score": 59.95,
+      "risk_level": "medium"
+    },
+    {
+      "date": "2026-05-03",
+      "tmean": 21.35,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 3.825,
+      "npp_gc_m2_day": 1.721,
+      "et_mm_day": 2.176,
+      "carbon_sink_kg_ha_day": 17.211,
+      "growth_score": 56.25,
+      "risk_level": "medium"
+    }
+  ]
+}

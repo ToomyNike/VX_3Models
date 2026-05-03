@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEPS-Lite 咖啡生态模型可视化面板</title>
+  <style>
+    :root {
+      --bg: #f5f7f2;
+      --panel: #ffffff;
+      --panel-soft: #fbfcf7;
+      --text: #1f2a1f;
+      --muted: #657060;
+      --line: #dfe7d8;
+      --green: #2f7d4f;
+      --green-dark: #1e5e39;
+      --orange: #d97706;
+      --red: #b91c1c;
+      --blue: #2563eb;
+      --shadow: 0 16px 40px rgba(32, 55, 31, 0.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background: radial-gradient(circle at top left, #e9f5dc 0, transparent 34%), var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #eef8e9, #ffffff 58%, #f7fbf2);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.25;
+      color: var(--green-dark);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .status-box {
+      background: rgba(255,255,255,0.75);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      border-radius: 999px;
+      background: #9ca3af;
+      margin-right: 8px;
+    }
+
+    .status-dot.ok { background: #16a34a; }
+    .status-dot.bad { background: #dc2626; }
+
+    .api-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #fff;
+      background: var(--green);
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(47,125,79,0.18);
+    }
+
+    button:hover { filter: brightness(0.96); }
+    button.secondary { background: #334155; }
+    button.blue { background: var(--blue); }
+    button.orange { background: var(--orange); }
+    button.ghost {
+      background: #fff;
+      color: var(--green-dark);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: var(--green-dark);
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .button-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 108px;
+    }
+
+    .card .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .card .value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .card .unit {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .risk-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .risk-low { background: #16a34a; }
+    .risk-medium { background: #d97706; }
+    .risk-high { background: #dc2626; }
+    .risk-none { background: #64748b; }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .chart-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .chart-card h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: var(--green-dark);
+    }
+
+    canvas {
+      width: 100%;
+      height: 260px;
+      display: block;
+    }
+
+    .explain {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .explain-item {
+      background: #f8faf5;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .explain-item strong {
+      display: block;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+
+    .explain-item p {
+      margin: 0;
+      line-height: 1.7;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .scenario-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      font-size: 13px;
+    }
+
+    .scenario-table th,
+    .scenario-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+    }
+
+    .scenario-table th {
+      background: #f2f7ec;
+      color: var(--green-dark);
+    }
+
+    .scenario-table tr:last-child td { border-bottom: none; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1000px) {
+      .hero, .grid, .charts, .explain { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .page { padding: 14px; }
+      .cards { grid-template-columns: 1fr; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div>
+        <h1>BEPS-Lite 咖啡生态模型可视化面板</h1>
+        <p>
+          本页面用于直观调用 Flask 后端中的 BEPS-Lite 模型，查看 GPP、NPP、ET、碳汇、长势评分、生态风险，
+          并支持三模型融合结果与多情景模拟对比展示。
+        </p>
+      </div>
+      <div class="status-box">
+        <div class="status-line">
+          <span><span id="statusDot" class="status-dot"></span><span id="statusText">未检测后端状态</span></span>
+          <button class="ghost" onclick="checkBackend()">检测后端</button>
+        </div>
+        <div class="api-row">
+          <input id="apiBase" value="http://127.0.0.1:5000" />
+          <button onclick="saveApiBase()">保存</button>
+        </div>
+        <div class="hint">如果该网页由 Flask 同源打开，可填空或使用 http://127.0.0.1:5000。</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <aside class="panel">
+        <h2>模型输入</h2>
+        <div class="form-group">
+          <label>地块 ID</label>
+          <input id="plotId" value="coffee_plot_001" />
+        </div>
+        <div class="form-group">
+          <label>LAI 叶面积指数，优先来自 APSIM</label>
+          <input id="lai" type="number" step="0.1" value="2.7" />
+        </div>
+        <div class="form-group">
+          <label>NDVI 遥感长势</label>
+          <input id="ndvi" type="number" step="0.01" value="0.68" />
+        </div>
+        <div class="form-group">
+          <label>遮阴程度 shade_degree，0-1</label>
+          <input id="shadeDegree" type="number" step="0.01" value="0.4" />
+        </div>
+        <div class="form-group">
+          <label>水分限制因子 water_factor，优先来自 HYDRUS</label>
+          <input id="waterFactor" type="number" step="0.01" value="0.78" />
+        </div>
+        <div class="form-group">
+          <label>APSIM 水分胁迫 water_stress</label>
+          <input id="waterStress" type="number" step="0.01" value="0.72" />
+        </div>
+        <div class="form-group">
+          <label>HYDRUS 根系吸水效率</label>
+          <input id="rootUptake" type="number" step="0.01" value="0.42" />
+        </div>
+        <div class="button-stack">
+          <button onclick="runBepsLite()">运行 BEPS-Lite</button>
+          <button class="blue" onclick="runFuseDemo()">运行三模型融合</button>
+          <button class="orange" onclick="runScenarioCompare()">运行情景模拟对比</button>
+          <button class="secondary" onclick="loadLatest()">读取最新 BEPS 结果</button>
+        </div>
+        <div class="hint">运行顺序建议：先检测后端，再运行 BEPS-Lite。</div>
+      </aside>
+
+      <main>
+        <section class="panel">
+          <h2>核心指标总览</h2>
+          <div class="cards">
+            <div class="card"><div class="label">长势评分</div><div class="value" id="growthScore">--</div><div class="unit">0-100 分</div></div>
+            <div class="card"><div class="label">生态风险</div><div class="value"><span id="riskLevel" class="risk-pill risk-none">--</span></div><div class="unit">low / medium / high</div></div>
+            <div class="card"><div class="label">GPP</div><div class="value" id="gppValue">--</div><div class="unit">gC/m²/day</div></div>
+            <div class="card"><div class="label">NPP</div><div class="value" id="nppValue">--</div><div class="unit">gC/m²/day</div></div>
+            <div class="card"><div class="label">ET</div><div class="value" id="etValue">--</div><div class="unit">mm/day</div></div>
+            <div class="card"><div class="label">碳汇估计</div><div class="value" id="carbonValue">--</div><div class="unit">kgC/ha</div></div>
+            <div class="card"><div class="label">水分胁迫</div><div class="value" id="waterStressCard">--</div><div class="unit">APSIM 输出</div></div>
+            <div class="card"><div class="label">根系吸水效率</div><div class="value" id="rootUptakeCard">--</div><div class="unit">HYDRUS 输出</div></div>
+          </div>
+
+          <div class="explain">
+            <div class="explain-item"><strong>当前发生了什么</strong><p id="whatText">等待模型运行。</p></div>
+            <div class="explain-item"><strong>应该怎么解决</strong><p id="howText">等待模型运行。</p></div>
+            <div class="explain-item"><strong>为什么这样建议</strong><p id="whyText">等待模型运行。</p></div>
+          </div>
+        </section>
+
+        <section class="charts">
+          <div class="chart-card">
+            <h3>BEPS-Lite 时间序列：GPP / NPP / ET</h3>
+            <canvas id="seriesChart" width="640" height="320"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>情景模拟对比：长势评分与生态指标</h3>
+            <canvas id="scenarioChart" width="640" height="320"></canvas>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top:16px;">
+          <h2>情景模拟结果</h2>
+          <div id="scenarioConclusion" class="hint">点击“运行情景模拟对比”后，这里会展示正常、缺水、遮阴过高、NDVI 偏低和综合胁迫的对比。</div>
+          <div style="overflow:auto; margin-top:12px;">
+            <table class="scenario-table">
+              <thead>
+                <tr><th>情景</th><th>GPP</th><th>NPP</th><th>ET</th><th>碳汇</th><th>长势评分</th><th>风险</th></tr>
+              </thead>
+              <tbody id="scenarioTableBody">
+                <tr><td colspan="7">暂无情景模拟结果</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const fallbackWeather = [
+      { date: "2026-05-01", tmin: 16.5, tmax: 26.8, radiation_mj: 18.6, rainfall_mm: 3.2, rh: 72, wind_ms: 1.4 },
+      { date: "2026-05-02", tmin: 17.1, tmax: 27.3, radiation_mj: 19.2, rainfall_mm: 0.0, rh: 68, wind_ms: 1.6 },
+      { date: "2026-05-03", tmin: 16.8, tmax: 25.9, radiation_mj: 17.4, rainfall_mm: 5.5, rh: 75, wind_ms: 1.2 }
+    ];
+
+    let lastSeries = [];
+    let lastScenarioResults = [];
+
+    function getApiBase() {
+      const input = document.getElementById("apiBase").value.trim();
+      return input.replace(/\/$/, "");
+    }
+
+    function saveApiBase() {
+      localStorage.setItem("beps_api_base", getApiBase());
+      alert("API 地址已保存");
+    }
+
+    function initApiBase() {
+      const saved = localStorage.getItem("beps_api_base");
+      if (saved) document.getElementById("apiBase").value = saved;
+    }
+
+    function valueNumber(id) {
+      const v = document.getElementById(id).value;
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function buildBasePayload(includeWeather = true) {
+      const payload = {
+        plot_id: document.getElementById("plotId").value || "coffee_plot_001",
+        lai: valueNumber("lai"),
+        ndvi: valueNumber("ndvi"),
+        shade_degree: valueNumber("shadeDegree"),
+        water_factor: valueNumber("waterFactor")
+      };
+      if (includeWeather) payload.weather = fallbackWeather;
+      return payload;
+    }
+
+    function buildFusionPayload() {
+      const lai = valueNumber("lai");
+      const rootUptake = valueNumber("rootUptake");
+      return {
+        plot_id: document.getElementById("plotId").value || "coffee_plot_001",
+        ndvi: valueNumber("ndvi"),
+        shade_degree: valueNumber("shadeDegree"),
+        apsim_result: {
+          stage: "果实膨大期",
+          yield_prediction: 1320,
+          lai: lai,
+          water_stress: valueNumber("waterStress"),
+          nitrogen_stress: 0.35
+        },
+        hydrus_result: {
+          root_uptake_efficiency: rootUptake,
+          infiltration_depth_cm: 32
+        }
+      };
+    }
+
+    async function apiFetch(path, options = {}) {
+      const url = `${getApiBase()}${path}`;
+      const resp = await fetch(url, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          ...(options.headers || {})
+        }
+      });
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(`${resp.status} ${resp.statusText}: ${text}`);
+      }
+      return resp.json();
+    }
+
+    async function checkBackend() {
+      const dot = document.getElementById("statusDot");
+      const text = document.getElementById("statusText");
+      try {
+        await apiFetch("/", { method: "GET", headers: {} });
+        dot.className = "status-dot ok";
+        text.textContent = "后端连接正常";
+      } catch (err) {
+        dot.className = "status-dot bad";
+        text.textContent = "后端连接失败：" + err.message;
+      }
+    }
+
+    async function runBepsLite() {
+      try {
+        const data = await apiFetch("/api/beps-lite/run", {
+          method: "POST",
+          body: JSON.stringify(buildBasePayload(true))
+        });
+        updateFromBepsResult(data);
+      } catch (err) {
+        showError(err);
+      }
+    }
+
+    async function runFuseDemo() {
+      try {
+        const data = await apiFetch("/api/model/fuse-demo", {
+          method: "POST",
+          body: JSON.stringify(buildFusionPayload())
+        });
+        updateFromFusionResult(data);
+      } catch (err) {
+        showError(err);
+      }
+    }
+
+    async function runScenarioCompare() {
+      try {
+        const data = await apiFetch("/api/beps-lite/scenario-compare", {
+          method: "POST",
+          body: JSON.stringify(buildBasePayload(false))
+        });
+        lastScenarioResults = data.results || [];
+        updateScenarioTable(lastScenarioResults);
+        drawScenarioChart(lastScenarioResults);
+        document.getElementById("scenarioConclusion").textContent = data.conclusion || makeScenarioConclusion(lastScenarioResults);
+      } catch (err) {
+        showError(err);
+      }
+    }
+
+    async function loadLatest() {
+      try {
+        const data = await apiFetch("/api/beps-lite/latest", { method: "GET", headers: {} });
+        if (data && data.data) updateFromBepsResult(data.data);
+      } catch (err) {
+        showError(err);
+      }
+    }
+
+    function updateFromBepsResult(beps) {
+      const summary = beps.summary || {};
+      setText("growthScore", summary.growth_score);
+      setRisk(summary.risk_level);
+      setText("gppValue", summary.avg_gpp_gc_m2_day);
+      setText("nppValue", summary.avg_npp_gc_m2_day);
+      setText("etValue", summary.avg_et_mm_day);
+      setText("carbonValue", summary.total_carbon_sink_kg_ha);
+      setText("waterStressCard", "--");
+      setText("rootUptakeCard", beps.input_summary ? beps.input_summary.water_factor : "--");
+      const reasons = summary.risk_reasons || [];
+      document.getElementById("whatText").textContent = reasons[0] || "BEPS-Lite 已完成生态指标计算。";
+      document.getElementById("howText").textContent = summary.risk_level === "high" ? "建议立即检查水分、遮阴和冠层状态。" : "维持现有管理，并持续观察长势变化。";
+      document.getElementById("whyText").textContent = "该判断来自 BEPS-Lite 的 GPP、NPP、ET、碳汇和长势评分结果。";
+      lastSeries = beps.series || [];
+      drawSeriesChart(lastSeries);
+    }
+
+    function updateFromFusionResult(data) {
+      const fused = data.fused_result || {};
+      const cards = fused.cards || {};
+      setText("growthScore", cards.growth_score);
+      setRisk(fused.risk_level);
+      setText("gppValue", cards.gpp);
+      setText("nppValue", cards.npp);
+      setText("etValue", cards.et);
+      setText("carbonValue", cards.carbon_sink);
+      setText("waterStressCard", cards.water_stress);
+      setText("rootUptakeCard", cards.root_uptake_efficiency);
+      document.getElementById("whatText").textContent = fused.what || "--";
+      document.getElementById("howText").textContent = fused.how || "--";
+      document.getElementById("whyText").textContent = fused.why || "--";
+      if (data.beps_result) {
+        lastSeries = data.beps_result.series || [];
+        drawSeriesChart(lastSeries);
+      }
+    }
+
+    function updateScenarioTable(results) {
+      const body = document.getElementById("scenarioTableBody");
+      if (!results.length) {
+        body.innerHTML = `<tr><td colspan="7">暂无情景模拟结果</td></tr>`;
+        return;
+      }
+      body.innerHTML = results.map(item => {
+        const s = item.summary || {};
+        const risk = s.risk_level || "--";
+        return `<tr>
+          <td>${escapeHtml(item.scenario_name || "--")}</td>
+          <td>${fmt(s.gpp)}</td>
+          <td>${fmt(s.npp)}</td>
+          <td>${fmt(s.et)}</td>
+          <td>${fmt(s.carbon_sink)}</td>
+          <td>${fmt(s.growth_score)}</td>
+          <td><span class="risk-pill risk-${risk}">${risk}</span></td>
+        </tr>`;
+      }).join("");
+    }
+
+    function makeScenarioConclusion(results) {
+      if (!results.length) return "暂无情景模拟结论。";
+      const sorted = [...results].sort((a, b) => (b.summary?.growth_score || 0) - (a.summary?.growth_score || 0));
+      const best = sorted[0];
+      const worst = sorted[sorted.length - 1];
+      return `${best.scenario_name}下长势评分最高，说明该情景更有利于冠层光合生产和碳积累；${worst.scenario_name}下长势评分最低，提示该情景对 GPP、NPP、ET 和碳汇产生明显抑制。`;
+    }
+
+    function setText(id, value) {
+      document.getElementById(id).textContent = fmt(value);
+    }
+
+    function setRisk(level) {
+      const el = document.getElementById("riskLevel");
+      const risk = level || "--";
+      el.textContent = risk;
+      el.className = "risk-pill risk-" + (level || "none");
+    }
+
+    function fmt(v) {
+      if (v === undefined || v === null || v === "") return "--";
+      if (typeof v === "number") return Number.isInteger(v) ? String(v) : String(Number(v.toFixed(3)));
+      return String(v);
+    }
+
+    function showError(err) {
+      alert("请求失败：\n" + err.message);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>'"]/g, s => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+      }[s]));
+    }
+
+    function setupCanvas(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx, w: rect.width, h: rect.height };
+    }
+
+    function drawAxes(ctx, w, h, labels, maxVal) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+      const left = 46, right = 16, top = 20, bottom = 42;
+      const cw = w - left - right;
+      const ch = h - top - bottom;
+      ctx.strokeStyle = "#dfe7d8";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = top + ch * i / 4;
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(w - right, y);
+        ctx.stroke();
+        ctx.fillStyle = "#64748b";
+        ctx.font = "12px Arial";
+        const val = maxVal * (1 - i / 4);
+        ctx.fillText(val.toFixed(1), 4, y + 4);
+      }
+      labels.forEach((label, i) => {
+        const x = left + cw * (i + 0.5) / labels.length;
+        ctx.fillStyle = "#64748b";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(label, x, h - 16);
+      });
+      ctx.textAlign = "left";
+      return { left, right, top, bottom, cw, ch };
+    }
+
+    function drawSeriesChart(series) {
+      const canvas = document.getElementById("seriesChart");
+      const { ctx, w, h } = setupCanvas(canvas);
+      if (!series.length) {
+        emptyChart(ctx, w, h, "暂无 BEPS-Lite 时间序列");
+        return;
+      }
+      const labels = series.map(x => (x.date || "").slice(5));
+      const maxVal = Math.max(
+        1,
+        ...series.map(x => x.gpp_gc_m2_day || 0),
+        ...series.map(x => x.npp_gc_m2_day || 0),
+        ...series.map(x => x.et_mm_day || 0)
+      ) * 1.2;
+      const box = drawAxes(ctx, w, h, labels, maxVal);
+      drawLine(ctx, series.map(x => x.gpp_gc_m2_day || 0), maxVal, box, w, h, "#2f7d4f");
+      drawLine(ctx, series.map(x => x.npp_gc_m2_day || 0), maxVal, box, w, h, "#2563eb");
+      drawLine(ctx, series.map(x => x.et_mm_day || 0), maxVal, box, w, h, "#d97706");
+      drawLegend(ctx, [{ name: "GPP", color: "#2f7d4f" }, { name: "NPP", color: "#2563eb" }, { name: "ET", color: "#d97706" }], w);
+    }
+
+    function drawLine(ctx, values, maxVal, box, w, h, color) {
+      const { left, top, cw, ch } = box;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = left + cw * (i + 0.5) / values.length;
+        const y = top + ch * (1 - v / maxVal);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      values.forEach((v, i) => {
+        const x = left + cw * (i + 0.5) / values.length;
+        const y = top + ch * (1 - v / maxVal);
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function drawScenarioChart(results) {
+      const canvas = document.getElementById("scenarioChart");
+      const { ctx, w, h } = setupCanvas(canvas);
+      if (!results.length) {
+        emptyChart(ctx, w, h, "暂无情景模拟结果");
+        return;
+      }
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, w, h);
+      const left = 46, right = 16, top = 22, bottom = 58;
+      const cw = w - left - right;
+      const ch = h - top - bottom;
+      const values = results.map(x => x.summary?.growth_score || 0);
+      const maxVal = 100;
+
+      ctx.strokeStyle = "#dfe7d8";
+      for (let i = 0; i <= 4; i++) {
+        const y = top + ch * i / 4;
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(w - right, y);
+        ctx.stroke();
+        ctx.fillStyle = "#64748b";
+        ctx.font = "12px Arial";
+        ctx.fillText((maxVal * (1 - i / 4)).toFixed(0), 8, y + 4);
+      }
+
+      const barGap = 12;
+      const barW = Math.max(24, cw / results.length - barGap);
+      values.forEach((v, i) => {
+        const x = left + cw * i / results.length + barGap / 2;
+        const barH = ch * v / maxVal;
+        const y = top + ch - barH;
+        const risk = results[i].summary?.risk_level;
+        ctx.fillStyle = risk === "high" ? "#dc2626" : risk === "medium" ? "#d97706" : "#2f7d4f";
+        roundRect(ctx, x, y, barW, barH, 8);
+        ctx.fill();
+        ctx.fillStyle = "#1f2937";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(v.toFixed(1), x + barW / 2, y - 6);
+        const label = (results[i].scenario_name || "").replace("情景", "");
+        ctx.save();
+        ctx.translate(x + barW / 2, h - 16);
+        ctx.rotate(-0.25);
+        ctx.fillStyle = "#64748b";
+        ctx.fillText(label, 0, 0);
+        ctx.restore();
+      });
+      ctx.textAlign = "left";
+    }
+
+    function drawLegend(ctx, items, w) {
+      let x = w - 170;
+      const y = 18;
+      items.forEach(item => {
+        ctx.fillStyle = item.color;
+        ctx.fillRect(x, y - 9, 10, 10);
+        ctx.fillStyle = "#475569";
+        ctx.font = "12px Arial";
+        ctx.fillText(item.name, x + 14, y);
+        x += 52;
+      });
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function emptyChart(ctx, w, h, text) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "14px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(text, w / 2, h / 2);
+      ctx.textAlign = "left";
+    }
+
+    window.addEventListener("resize", () => {
+      drawSeriesChart(lastSeries);
+      drawScenarioChart(lastScenarioResults);
+    });
+
+    initApiBase();
+    drawSeriesChart([]);
+    drawScenarioChart([]);
+    checkBackend();
+  </script>
+</body>
+</html>

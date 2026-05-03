@@ -1,0 +1,64 @@
+{
+  "module": "BEPS-Lite",
+  "status": "ok",
+  "plot_id": "coffee_plot_001",
+  "input_summary": {
+    "lai": 2.7,
+    "ndvi": 0.68,
+    "shade_degree": 0.4,
+    "water_factor": 0.78,
+    "fpar": 0.724
+  },
+  "summary": {
+    "avg_gpp_gc_m2_day": 7.734,
+    "avg_npp_gc_m2_day": 3.48,
+    "avg_et_mm_day": 2.983,
+    "total_carbon_sink_kg_ha": 104.413,
+    "growth_score": 82.22,
+    "risk_level": "low",
+    "risk_reasons": [
+      "冠层生态状态总体正常，维持当前管理"
+    ]
+  },
+  "series": [
+    {
+      "date": "2026-05-01",
+      "tmean": 21.65,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 7.763,
+      "npp_gc_m2_day": 3.493,
+      "et_mm_day": 3.002,
+      "carbon_sink_kg_ha_day": 34.935,
+      "growth_score": 82.76,
+      "risk_level": "low"
+    },
+    {
+      "date": "2026-05-02",
+      "tmean": 22.2,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 8.337,
+      "npp_gc_m2_day": 3.751,
+      "et_mm_day": 3.221,
+      "carbon_sink_kg_ha_day": 37.515,
+      "growth_score": 84.31,
+      "risk_level": "low"
+    },
+    {
+      "date": "2026-05-03",
+      "tmean": 21.35,
+      "lai": 2.7,
+      "ndvi": 0.68,
+      "fpar": 0.724,
+      "gpp_gc_m2_day": 7.103,
+      "npp_gc_m2_day": 3.196,
+      "et_mm_day": 2.727,
+      "carbon_sink_kg_ha_day": 31.963,
+      "growth_score": 79.59,
+      "risk_level": "low"
+    }
+  ]
+}
