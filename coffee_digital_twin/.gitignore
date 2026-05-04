@@ -9,3 +9,4 @@ server/backup/final_result_json/*
 !server/backup/final_result_json/.gitkeep
 __pycache__/
 *.pyc
+backend/.env

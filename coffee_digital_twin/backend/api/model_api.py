@@ -125,7 +125,7 @@ def run_model():
     try:
         apsim_result = run_apsim_model(model_input)
         hydrus_result = run_hydrus_model(model_input)
-        beps_result = run_beps_model(model_input)
+        beps_result = run_beps_model(model_input, apsim_result=apsim_result, hydrus_result=hydrus_result)
         result = merge(
             apsim_result,
             hydrus_result,

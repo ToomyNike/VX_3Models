@@ -9,3 +9,62 @@ Press CTRL+C to quit
  * Debugger is active!
  * Debugger PIN: 498-491-481
 127.0.0.1 - - [01/May/2026 10:06:15] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 11:57:22] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 11:58:59] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [01/May/2026 11:59:00] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/May/2026 17:42:12] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:29] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:35] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:38] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:45] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:51] "POST /api/model/run HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:51] "GET /api/model/result/task_ec72c019 HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:56] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:42:57] "POST /api/advice/generate HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:43:01] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:46:38] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:46:38] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:47:03] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:47:03] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:49:25] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 17:49:42] "GET /api/dashboard HTTP/1.1" 200 -
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+127.0.0.1 - - [01/May/2026 18:09:18] "POST /api/model/run HTTP/1.1" 200 -
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+ * Detected change in 'D:\\AAACODE\\PYTHON\\VX_3Models\\coffee_digital_twin\\backend\\models\\apsim_adapter.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 498-491-481
+127.0.0.1 - - [01/May/2026 18:25:10] "POST /api/model/run HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 18:28:23] "GET /api/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/May/2026 18:28:44] "GET /api/dashboard HTTP/1.1" 200 -

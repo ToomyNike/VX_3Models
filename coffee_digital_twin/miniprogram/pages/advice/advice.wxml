@@ -1,23 +1,62 @@
 <view class="page">
-  <view class="section">
-    <view class="section-title">AI农技建议</view>
-    <view class="muted">what / how / why 三段式输出</view>
+
+  <!-- 顶部标题 -->
+  <view class="header">
+    <view class="header-title">🌱 AI 农技顾问</view>
+    <view class="header-sub">基于 APSIM · HYDRUS · BEPS 三模型实时分析</view>
   </view>
 
-  <loading-panel wx:if="{{loading}}" text="生成农技建议"></loading-panel>
+  <!-- 聊天消息列表 -->
+  <scroll-view
+    class="chat-list"
+    scroll-y
+    scroll-into-view="{{scrollTarget}}"
+    scroll-with-animation
+  >
+    <block wx:for="{{messages}}" wx:key="id">
+      <!-- AI 消息（左侧） -->
+      <view wx:if="{{item.role === 'assistant'}}" class="bubble-wrap ai">
+        <view class="avatar">🤖</view>
+        <view class="bubble ai">{{item.content}}</view>
+      </view>
+      <!-- 用户消息（右侧） -->
+      <view wx:elif="{{item.role === 'user'}}" class="bubble-wrap user">
+        <view class="avatar">👤</view>
+        <view class="bubble user">{{item.content}}</view>
+      </view>
+    </block>
 
-  <block wx:else>
-    <view class="advice-card">
-      <view class="label">What</view>
-      <view class="content">{{advice.what}}</view>
+    <!-- 打字中指示器 -->
+    <view wx:if="{{typing}}" class="bubble-wrap ai">
+      <view class="avatar">🤖</view>
+      <view class="bubble ai">
+        <view class="typing">
+          <view class="dot"></view>
+          <view class="dot"></view>
+          <view class="dot"></view>
+        </view>
+      </view>
     </view>
-    <view class="advice-card">
-      <view class="label">How</view>
-      <view class="content">{{advice.how}}</view>
-    </view>
-    <view class="advice-card">
-      <view class="label">Why</view>
-      <view class="content">{{advice.why}}</view>
-    </view>
-  </block>
+
+    <!-- 滚动锚点 -->
+    <view id="bottom"></view>
+  </scroll-view>
+
+  <!-- 底部输入栏 -->
+  <view class="input-bar">
+    <textarea
+      class="chat-input"
+      placeholder="问问题，例如：本周需要灌溉吗？"
+      value="{{inputText}}"
+      bindinput="onInput"
+      bindconfirm="onSend"
+      auto-height
+      maxlength="200"
+    />
+    <view
+      class="send-btn {{(typing || !inputText) ? 'disabled' : ''}}"
+      bindtap="onSend"
+    >发送</view>
+  </view>
+
 </view>
