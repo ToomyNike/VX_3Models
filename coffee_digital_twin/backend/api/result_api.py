@@ -29,6 +29,7 @@ def model_result(task_id):
 
 @result_bp.get("/dashboard")
 def dashboard():
+    # AI辅助生成-DeepSeek-V3 - 2026年4月30日 11:15:00 - 返回数字孪生控制台的综合聚合数据
     result = _latest_result()
     if not result:
         return jsonify(

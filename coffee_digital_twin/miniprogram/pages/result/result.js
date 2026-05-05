@@ -57,6 +57,7 @@ Page({
   },
 
   async loadResult() {
+    // AI辅助生成-DeepSeek-V3 - 2026年5月2日 18:30:10 - 小程序结果页数据装载与图表格式化
     this.setData({ loading: true });
     try {
       const res = await request({ url: `/api/model/result/${this.data.taskId}` });

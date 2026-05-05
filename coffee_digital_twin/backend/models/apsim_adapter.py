@@ -494,6 +494,7 @@ def _run_apsim_engine(task_id, model_input_json):
 
 
 def run_apsim_model(model_input_json):
+    # AI辅助生成-DeepSeek-V3 - 2026年4月26日 14:15:33 - APSIM核心调度引擎，解析并执行.apsimx
     task_id = model_input_json.get("task_id", "task_demo")
     try:
         run_dir, stdout, stderr, weather_file, events, start_date, end_date = _run_apsim_engine(task_id, model_input_json)

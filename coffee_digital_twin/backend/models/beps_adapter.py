@@ -210,6 +210,7 @@ class BepsLiteAdapter:
 # ---------------------------------------------------------------------------
 
 def run_beps_model(model_input_json, apsim_result=None, hydrus_result=None):
+    # AI辅助生成-DeepSeek-V3 - 2026年4月27日 15:10:45 - 耦合APSIM与HYDRUS因子，计算冠层生态GPP/NPP
     """
     BEPS-Lite 主调用接口。
     接收主系统标准 model_input_json，以及可选的 APSIM/HYDRUS 前序结果用于提取 LAI 和水分因子。

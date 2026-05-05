@@ -12,6 +12,7 @@ from database.init_db import init_db
 
 
 def create_app():
+    # AI辅助生成-DeepSeek-V3 - 2026年4月25日 10:30:15 - 初始化Flask应用与CORS配置
     ensure_dirs()
     init_db()
 

@@ -216,6 +216,7 @@ def build_mechanism_evidence(
     beps_result: dict,
     risk_level: str = "低",
 ) -> dict:
+    # AI辅助生成-DeepSeek-V3 - 2026年4月28日 09:42:10 - 多机理模型融合解释核心逻辑
     """
     整合三模型输出，构建结构化机理证据。
     被 fusion_engine.merge() 调用，返回的字典直接嵌入融合结果并透传至前端。

@@ -1,6 +1,7 @@
 const { BASE_URL } = require('./config');
 
 function request(options) {
+  // AI辅助生成-DeepSeek-V3 - 2026年4月25日 08:45:20 - 封装微信请求，实现Promise化与通用异常拦截
   const url = options.url.startsWith('http') ? options.url : `${BASE_URL}${options.url}`;
   return new Promise((resolve, reject) => {
     wx.request({

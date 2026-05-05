@@ -287,6 +287,7 @@ def _load_demo():
 # ---------------------------------------------------------------------------
 
 def run_hydrus_model(model_input_json):
+    # AI辅助生成-DeepSeek-V3 - 2026年4月26日 09:22:15 - HYDRUS-1D模型调用与土壤水分状态解析
     """
     HYDRUS-1D 主调用接口。
     接收主系统标准 model_input_json，内部自动转换为 HYDRUS 格式。

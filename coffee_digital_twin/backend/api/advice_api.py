@@ -25,6 +25,7 @@ def _load_latest_result(task_id=None):
 
 @advice_bp.post("/generate")
 def generate():
+    # AI辅助生成-DeepSeek-V3 - 2026年5月2日 16:50:22 - 调度LLM生成结构化农技建议
     """
     一次性生成 what/how/why/model_basis 四段式建议。
     返回结构：

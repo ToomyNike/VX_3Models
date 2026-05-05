@@ -25,6 +25,7 @@ Page({
   },
 
   // ── 首次加载：调用 /generate 获取三段式建议 + model_basis 作为开场 ──
+  // AI辅助生成-DeepSeek-V3 - 2026年5月3日 11:20:05 - 小程序端接入AI决策流展示
   async _loadInitialAdvice(taskId) {
     this.setData({ typing: true });
     try {

@@ -127,6 +127,7 @@ def generate_advice(
     beps_result: dict,
     mechanism_evidence: Optional[dict] = None,
 ) -> dict:
+    # AI辅助生成-DeepSeek-V3 - 2026年5月1日 14:05:30 - 构建系统提示词并请求大语言模型接口
     api_key = _load_api_key()
     if api_key:
         try:
