@@ -24,7 +24,7 @@ Page({
     }
   },
 
-  // ── 首次加载：调用 /generate 获取三段式建议作为开场 ──
+  // ── 首次加载：调用 /generate 获取三段式建议 + model_basis 作为开场 ──
   async _loadInitialAdvice(taskId) {
     this.setData({ typing: true });
     try {
@@ -34,13 +34,31 @@ Page({
         data: { task_id: taskId },
       });
       const a = res.advice || {};
-      const opening = [
-        a.what ? `📊 当前状态：${a.what}` : '',
-        a.how  ? `✅ 建议操作：${a.how}` : '',
-        a.why  ? `🔬 模型依据：${a.why}` : '',
-      ].filter(Boolean).join('\n\n');
+      const basis = a.model_basis || {};
 
-      this._pushMessage('assistant', opening || '已加载三模型分析结果，请随时提问！');
+      // 拼接结构化开场白：what / how / why / model_basis
+      const parts = [
+        a.what ? `📊 当前状态\n${a.what}` : '',
+        a.how  ? `✅ 建议操作\n${a.how}` : '',
+        a.why  ? `🔬 为什么这样做\n${a.why}` : '',
+      ];
+
+      // 模型依据（三模型分列）
+      const basisParts = [
+        basis.apsim  ? `🌱 APSIM-Coffee：${basis.apsim}` : '',
+        basis.hydrus ? `💧 HYDRUS-1D：${basis.hydrus}` : '',
+        basis.beps   ? `🌳 BEPS-Lite：${basis.beps}` : '',
+      ].filter(Boolean);
+      if (basisParts.length > 0) {
+        parts.push(`📌 模型依据\n${basisParts.join('\n')}`);
+      }
+
+      if (a.confidence_note) {
+        parts.push(`ℹ️ ${a.confidence_note}`);
+      }
+
+      const opening = parts.filter(Boolean).join('\n\n');
+      this._pushMessage('assistant', opening || '已加载三模型机理分析结果，请随时提问！');
     } catch (e) {
       this._pushMessage('assistant', '三模型数据加载完成，请随时向我提问关于咖啡园管理的问题。');
     } finally {

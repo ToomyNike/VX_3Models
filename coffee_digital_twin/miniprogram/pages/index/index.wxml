@@ -1,7 +1,7 @@
 <view class="page">
   <view class="section">
-    <view class="title">咖啡数字孪生智能决策系统</view>
-    <view class="muted">微信小程序 + Flask + APSIM / HYDRUS / BEPS</view>
+    <view class="title">面向云南小粒咖啡的多机理模型（APSIM/HYDRUS/BEPS）协同智能决策系统</view>
+    <view class="muted">基于 APSIM / HYDRUS / BEPS 三模型机理证据的智能农技解释</view>
   </view>
 
   <view class="section connection connection-{{backendStatus}}">
@@ -31,7 +31,7 @@
       <view class="row">
         <view>
           <view class="section-title small">综合风险</view>
-          <view class="muted">三模型融合判断</view>
+          <view class="muted">三模型机理互证判断</view>
         </view>
         <risk-badge risk="{{dashboard.risk_level || '低'}}"></risk-badge>
       </view>
@@ -50,6 +50,6 @@
       <button class="ghost-btn" bindtap="goResult">查看结果</button>
     </view>
 
-    <button class="primary-btn" bindtap="goAdvice">AI农技建议</button>
+    <button class="primary-btn" bindtap="goAdvice">AI农技建议（含机理解释）</button>
   </block>
 </view>

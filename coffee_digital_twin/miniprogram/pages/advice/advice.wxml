@@ -3,7 +3,7 @@
   <!-- 顶部标题 -->
   <view class="header">
     <view class="header-title">🌱 AI 农技顾问</view>
-    <view class="header-sub">基于 APSIM · HYDRUS · BEPS 三模型实时分析</view>
+    <view class="header-sub">基于 APSIM / HYDRUS / BEPS 三模型机理证据的智能农技解释</view>
   </view>
 
   <!-- 聊天消息列表 -->

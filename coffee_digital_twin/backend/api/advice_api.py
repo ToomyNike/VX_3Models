@@ -25,15 +25,32 @@ def _load_latest_result(task_id=None):
 
 @advice_bp.post("/generate")
 def generate():
-    """一次性生成 what/how/why 三段式建议（保持原有接口不变）。"""
+    """
+    一次性生成 what/how/why/model_basis 四段式建议。
+    返回结构：
+    {
+      "status": "success",
+      "task_id": "task_xxx",
+      "advice": {
+        "what": "...", "how": "...", "why": "...",
+        "model_basis": {"apsim": "...", "hydrus": "...", "beps": "..."},
+        "confidence_note": "...",
+        "source": "glm-4-flash"
+      },
+      "mechanism_explanation": { ... }   // 三模型机理证据
+    }
+    """
     payload = request.get_json(silent=True) or {}
     task_id = payload.get("task_id")
     result  = payload.get("result") or _load_latest_result(task_id)
+
+    mechanism = result.get("mechanism_explanation", {})
 
     advice = generate_advice(
         result.get("apsim", {}),
         result.get("hydrus", {}),
         result.get("beps", {}),
+        mechanism_evidence=mechanism,
     )
 
     with get_connection() as conn:
@@ -41,7 +58,13 @@ def generate():
             "INSERT INTO advice_logs (task_id, advice_json, created_at) VALUES (?, ?, ?)",
             (task_id or result.get("task_id"), json.dumps(advice, ensure_ascii=False), now_iso()),
         )
-    return jsonify({"status": "success", "task_id": task_id, "advice": advice})
+
+    return jsonify({
+        "status": "success",
+        "task_id": task_id,
+        "advice": advice,
+        "mechanism_explanation": mechanism,
+    })
 
 
 @advice_bp.post("/chat")
@@ -68,13 +91,16 @@ def chat():
     if not message:
         return jsonify({"status": "error", "message": "message 不能为空"}), 400
 
-    result  = _load_latest_result(task_id)
-    reply   = chat_with_context(
-        user_message  = message,
-        history       = history,
-        apsim_result  = result.get("apsim", {}),
-        hydrus_result = result.get("hydrus", {}),
-        beps_result   = result.get("beps", {}),
+    result    = _load_latest_result(task_id)
+    mechanism = result.get("mechanism_explanation", {})
+
+    reply = chat_with_context(
+        user_message     = message,
+        history          = history,
+        apsim_result     = result.get("apsim", {}),
+        hydrus_result    = result.get("hydrus", {}),
+        beps_result      = result.get("beps", {}),
+        mechanism_evidence = mechanism,
     )
 
     return jsonify({"status": "success", "task_id": task_id, "reply": reply})

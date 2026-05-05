@@ -11,6 +11,7 @@
   </block>
 
   <block wx:else>
+    <!-- 仪表盘摘要 -->
     <view class="section grid-2">
       <view class="grid-item card-wrap">
         <status-card label="生育期" value="{{result.dashboard.stage || '-'}}" sub="APSIM"></status-card>
@@ -26,6 +27,7 @@
       </view>
     </view>
 
+    <!-- 综合风险 -->
     <view class="section panel result-head">
       <view>
         <view class="section-title small">综合风险</view>
@@ -34,6 +36,110 @@
       <risk-badge risk="{{result.dashboard.risk_level || '低'}}"></risk-badge>
     </view>
 
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 三模型机理解释区域（核心亮点）                 -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <view class="section" wx:if="{{mechanism.apsim_evidence || mechanism.hydrus_evidence || mechanism.beps_evidence}}">
+      <view class="mechanism-header">
+        <view class="mechanism-title">🔬 三模型机理解释</view>
+        <view class="mechanism-sub">基于 APSIM / HYDRUS / BEPS 三模型机理证据的智能农技解释</view>
+      </view>
+
+      <!-- APSIM 机理卡片 -->
+      <view class="mechanism-card apsim-card" wx:if="{{mechanism.apsim_evidence}}">
+        <view class="mech-card-head">
+          <view class="mech-icon">🌱</view>
+          <view>
+            <view class="mech-card-title">{{mechanism.apsim_evidence.title}}</view>
+            <view class="mech-card-layer">作物生长层</view>
+          </view>
+        </view>
+        <view class="mech-card-summary">{{mechanism.apsim_evidence.summary}}</view>
+        <view class="mech-metrics">
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">生育期</view>
+            <view class="mech-metric-val">{{mechanism.apsim_evidence.key_metrics.stage || '-'}}</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">水分胁迫</view>
+            <view class="mech-metric-val">{{mechanism.apsim_evidence.key_metrics.water_stress || '-'}}</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">氮素状态</view>
+            <view class="mech-metric-val">{{mechanism.apsim_evidence.key_metrics.nitrogen_status || '-'}}</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">预计亩产</view>
+            <view class="mech-metric-val">{{mechanism.apsim_evidence.key_metrics.yield_pred_kg_mu || '-'}} kg</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- HYDRUS 机理卡片 -->
+      <view class="mechanism-card hydrus-card" wx:if="{{mechanism.hydrus_evidence}}">
+        <view class="mech-card-head">
+          <view class="mech-icon">💧</view>
+          <view>
+            <view class="mech-card-title">{{mechanism.hydrus_evidence.title}}</view>
+            <view class="mech-card-layer">土壤水分层</view>
+          </view>
+        </view>
+        <view class="mech-card-summary">{{mechanism.hydrus_evidence.summary}}</view>
+        <view class="mech-metrics">
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">水分状态</view>
+            <view class="mech-metric-val">{{mechanism.hydrus_evidence.key_metrics.water_status || '-'}}</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">入渗深度</view>
+            <view class="mech-metric-val">{{mechanism.hydrus_evidence.key_metrics.infiltration_depth_cm || '-'}} cm</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">根系吸水</view>
+            <view class="mech-metric-val">{{rootUptakePct}}</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- BEPS 机理卡片 -->
+      <view class="mechanism-card beps-card" wx:if="{{mechanism.beps_evidence}}">
+        <view class="mech-card-head">
+          <view class="mech-icon">🌳</view>
+          <view>
+            <view class="mech-card-title">{{mechanism.beps_evidence.title}}</view>
+            <view class="mech-card-layer">冠层生态层</view>
+          </view>
+        </view>
+        <view class="mech-card-summary">{{mechanism.beps_evidence.summary}}</view>
+        <view class="mech-metrics">
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">长势评分</view>
+            <view class="mech-metric-val">{{mechanism.beps_evidence.key_metrics.growth_score || '-'}}/100</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">GPP</view>
+            <view class="mech-metric-val">{{mechanism.beps_evidence.key_metrics.gpp_today || '-'}} gC/m²</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">NPP</view>
+            <view class="mech-metric-val">{{mechanism.beps_evidence.key_metrics.npp_today || '-'}} gC/m²</view>
+          </view>
+          <view class="mech-metric-item">
+            <view class="mech-metric-label">ET</view>
+            <view class="mech-metric-val">{{mechanism.beps_evidence.key_metrics.et_today || '-'}} mm</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 三模型综合判断 -->
+      <view class="integrated-reason" wx:if="{{mechanism.integrated_reason}}">
+        <view class="integrated-label">📌 三模型联合判断</view>
+        <view class="integrated-text">{{mechanism.integrated_reason}}</view>
+      </view>
+    </view>
+    <!-- ═══════════════════════════════════════════════ -->
+
+    <!-- 图表区域 -->
     <view class="section">
       <chart-card title="APSIM 产量预测" unit="kg/亩" items="{{yieldItems}}"></chart-card>
     </view>
@@ -50,6 +156,44 @@
       <chart-card title="BEPS ET" unit="mm" items="{{etItems}}"></chart-card>
     </view>
 
-    <button class="primary-btn" bindtap="goAdvice">查看AI农技建议</button>
+    <!-- 模型说明区域 -->
+    <view class="section model-info-section">
+      <view class="mechanism-header">
+        <view class="mechanism-title">📖 模型说明</view>
+        <view class="mechanism-sub">三模型各自预测什么、解释什么</view>
+      </view>
+      <view wx:for="{{modelInfoList}}" wx:key="name" class="model-info-card">
+        <view class="model-info-head">
+          <view class="mech-icon">{{item.icon}}</view>
+          <view>
+            <view class="model-info-name">{{item.name}}</view>
+            <view class="model-info-layer">{{item.layer}}</view>
+          </view>
+        </view>
+        <view class="model-info-explains">{{item.explains}}</view>
+        <view class="model-info-tags">
+          <view wx:for="{{item.predicts}}" wx:key="*this" wx:for-item="tag" class="model-tag">{{tag}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 示范验证案例 -->
+    <view class="section validation-section" wx:if="{{validationCases.length > 0}}">
+      <view class="mechanism-header">
+        <view class="mechanism-title">✅ 示范验证案例</view>
+        <view class="mechanism-sub">典型情景下三模型机理证据与系统判断是否一致</view>
+      </view>
+      <view wx:for="{{validationCases}}" wx:key="case_id" class="validation-card">
+        <view class="validation-head">
+          <view class="validation-name">{{item.case_name}}</view>
+          <view class="validation-badge">{{item.validation_result}}</view>
+        </view>
+        <view class="validation-scenario">场景：{{item.scenario}}</view>
+        <view class="validation-expected">预期：{{item.expected_suggestion}}</view>
+        <view class="validation-expert">专家复核：{{item.expert_check}}</view>
+      </view>
+    </view>
+
+    <button class="primary-btn" bindtap="goAdvice">查看AI农技建议（含机理解释）</button>
   </block>
 </view>

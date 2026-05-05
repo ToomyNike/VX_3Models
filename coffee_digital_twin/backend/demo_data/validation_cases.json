@@ -1,0 +1,113 @@
+[
+  {
+    "case_id": "case_001",
+    "case_name": "根区缺水 → 优先补灌",
+    "scenario": "连续少雨，灌溉量偏低，进入果实膨大期",
+    "input_summary": {
+      "rainfall_7d_mm": 3,
+      "last_irrigation_days_ago": 12,
+      "stage": "果实膨大期"
+    },
+    "model_outputs": {
+      "apsim": {
+        "water_stress": 0.65,
+        "nitrogen_status": "正常",
+        "stage": "果实膨大期"
+      },
+      "hydrus": {
+        "water_status": "中度干旱",
+        "infiltration_depth_cm": 28,
+        "root_uptake_ratio": 0.43
+      },
+      "beps": {
+        "growth_score": 62,
+        "gpp_today": 6.8,
+        "canopy_status": "轻度胁迫"
+      }
+    },
+    "expected_risk": "高",
+    "expected_suggestion": "系统应识别中度至重度干旱并建议优先补灌，灌溉量不低于30mm",
+    "mechanism_basis": {
+      "apsim": "水分胁迫升高（0.65），果实膨大期对水分最为敏感，产量形成面临风险",
+      "hydrus": "入渗深度仅28cm，主根区供水不足，根系吸水效率下降至43%",
+      "beps": "GPP和长势评分下降，冠层光合生产力受到水分限制"
+    },
+    "integrated_reason": "APSIM+HYDRUS+BEPS 三模型共同指向根区缺水，产量形成敏感期风险较高",
+    "expert_check": "符合云南咖啡旱季补水管理经验；果实膨大期缺水直接影响籽粒充实度",
+    "validation_result": "通过"
+  },
+  {
+    "case_id": "case_002",
+    "case_name": "氮素偏低 + 土壤偏干 → 先补水再追肥",
+    "scenario": "氮素检测偏低，但近期土壤水分不足",
+    "input_summary": {
+      "nitrogen_leaf_ppm": 18,
+      "soil_moisture_40cm_pct": 12,
+      "stage": "营养生长期"
+    },
+    "model_outputs": {
+      "apsim": {
+        "water_stress": 0.28,
+        "nitrogen_status": "偏低",
+        "stage": "营养生长期"
+      },
+      "hydrus": {
+        "water_status": "轻度干旱",
+        "infiltration_depth_cm": 35,
+        "root_uptake_ratio": 0.55
+      },
+      "beps": {
+        "growth_score": 70,
+        "gpp_today": 8.1,
+        "canopy_status": "轻度胁迫"
+      }
+    },
+    "expected_risk": "中等",
+    "expected_suggestion": "系统应建议先补水、待根区水分恢复后再少量追肥，避免肥效损失",
+    "mechanism_basis": {
+      "apsim": "氮素状态偏低，需要追肥，但水分胁迫已开始出现",
+      "hydrus": "根系吸水效率55%，土壤水分不足会限制养分溶解和根系吸收",
+      "beps": "长势偏弱，水肥协同改善有助于恢复生产力"
+    },
+    "integrated_reason": "APSIM 指示氮素不足，HYDRUS 指出根区偏干，联合判断：先补水再追肥，否则肥效释放受限",
+    "expert_check": "符合农艺逻辑：土壤水分不足时施肥，化肥无法溶解和运移到根系，造成肥料浪费",
+    "validation_result": "通过"
+  },
+  {
+    "case_id": "case_003",
+    "case_name": "长势下降但水肥正常 → 巡园排查",
+    "scenario": "近期水肥管理正常，但BEPS长势评分和GPP持续下降",
+    "input_summary": {
+      "irrigation_normal": true,
+      "fertilization_normal": true,
+      "growth_score_trend": "持续下降"
+    },
+    "model_outputs": {
+      "apsim": {
+        "water_stress": 0.12,
+        "nitrogen_status": "正常",
+        "stage": "花芽分化期"
+      },
+      "hydrus": {
+        "water_status": "适宜",
+        "infiltration_depth_cm": 55,
+        "root_uptake_ratio": 0.82
+      },
+      "beps": {
+        "growth_score": 56,
+        "gpp_today": 6.2,
+        "canopy_status": "异常"
+      }
+    },
+    "expected_risk": "中等",
+    "expected_suggestion": "系统应建议检查遮阴情况、病虫害征兆和冠层修剪需求，而非补水或追肥",
+    "mechanism_basis": {
+      "apsim": "水分胁迫正常（0.12），氮素正常，作物层无明显问题",
+      "hydrus": "根区水分适宜，根系吸水效率82%，土壤层排除缺水原因",
+      "beps": "GPP 6.2 gC/m²且持续下降，长势评分仅56分，冠层异常"
+    },
+    "integrated_reason": "APSIM+HYDRUS 排除水肥问题，但 BEPS 显示冠层异常——需巡园排查遮阴、病虫害等非水肥因素",
+    "expert_check": "符合咖啡园管理经验：咖啡易受天牛、叶锈病等影响，水肥正常时长势下降需及时巡园",
+    "validation_result": "通过"
+  }
+]

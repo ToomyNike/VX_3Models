@@ -1,0 +1,768 @@
+======= 计算机设计大赛思路：基于 APSIM 机理模型与微信小程序的全栈智慧农业平台.docx =======
+云南省计算机大赛思路
+云南高原特色咖啡“数字孪生”智能决策系统
+—— 基于 APSIM机理模型与微信小程序的全栈智慧农业平台
+一、 项目背景与建设目标
+传统农业生产高度依赖人工经验，抗气候风险能力弱。当前市面上的农业管理系统多基于 PC 网页端，严重脱离了基层果农“没有电脑、下地忙”的现实工作场景。本项目致力于构建一个真正能够下沉到田间地头的数字孪生决策系统。
+系统全面拥抱移动互联网生态，采用“微信小程序 + 轻量化 Python 后端”的架构。果农仅需在手机上完成极简的农事打卡，云端服务器即可悄无声息地驱动极其硬核的 APSIM 农业机理模型进行物理推演。最终，系统将晦涩的模型数据转化为直观的产量曲线与口语化的农技建议，直接推送到果农手机，打通智慧农业落地的“最后一公里”。
+二、 总体技术路线与架构设计
+为确保项目在有限周期内快速落地并具备极高的演示稳定性，本系统摒弃了臃肿的传统企业级架构，采用极其精简且高效的全栈技术方案：
+前端交互层： 采用原生微信小程序框架。依托微信庞大的生态基础，实现果农的“免安装、即开即用”。在数据可视化方面，引入 ECharts 微信小程序版（echarts-for-weixin），在移动端流畅渲染动态折线图与指标面板。
+后端接口层： 采用Flask 微框架构建 RESTful API 服务。Flask 的轻量化特性极大地降低了接口开发与环境配置的成本，主要负责接收小程序传来的 JSON 数据，并调度底层的计算引擎。
+机理计算层： 系统直接在 Windows 环境（或 WSL）下运行。后端 Flask 接收到请求后，利用 Python 内置模块读写 APSIM 的 .apsimx 配置文件，并使用 subprocess 子进程直接调用 Windows 版 APSIM 的核心执行程序 Models.exe，实现无图形界面的静默推演。
+数据与智能层： 全量采用 Python 原生支持的 SQLite 本地文件数据库。系统中仅存在两个极轻量的 .db 文件，一个用于存储果农账号与基础信息，另一个直接承接 APSIM 引擎模拟完毕自动生成的产量结果数据。此外，后端接入 千问、DeepSeek 或 Kimi 等大语言模型 API，充当智能农技顾问（后期和咖啡知识库大模型结合）。
+三、 核心数据流转与人机交互机制
+为了不增加果农的操作负担，系统对底层数十项复杂的农业物理参数进行了“黑盒封装”，果农在小程序端只需进行最符合直觉的简单交互。完整的数据流转机制如下：
+果农上传的数据：
+果农在使用初期仅需进行一次建园初始化，填写咖啡园的实际亩数、咖啡树大致树龄，并通过小程序一键获取所在果园的经纬度定位（用于后端自动匹配气象数据）。在日常巡园时，果农只需像发朋友圈一样进行“农事打卡”。例如完成浇水后，选择日期并输入大致水量（毫米或立方）；完成施肥后，选择日期、肥料类型（如尿素）并输入公斤数。这些简单的数字将通过 Flask 接口直接映射修改底层 APSIM 的运作参数。
+果农在小程序端输入数据清单
+此外，后端计算输入数据：
+气象数据 (Weather)：每日最高温、最低温、降雨量、辐射。全部由 Python 定时抓取气象 API 或果园 IoT 气象站写入 .met 文件。
+土壤水热与本底 (Physical, Chemical)：土壤容重、田间持水量、萎蔫点、初始氮磷钾。这些由你用当地红壤数据在 .apsimx 模板里写死。
+作物遗传 (Cultivar)：咖啡的积温要求、光能利用率、最大根深。模板写死。
+小程序输出的数据：
+经过后端的秒级运算，果农将在小程序首页直观获取三大维度的数字反馈。首先是当前状态大字报，显示当前咖啡所处的精准生育阶段及预计距离采收的天数。其次是 ECharts 驱动的产量预测曲线，果农可以清晰看到：随着今天的浇水或施肥，原本预测的 1200 公斤最终产量曲线上扬到了 1350 公斤。最后是大模型生成的智能农事建议，系统会将“土壤水分逼近萎蔫下限”等枯燥警告，转化为诸如“李老板，模型测算未来一周果园极度缺水，为保住产量，建议明天紧急滴灌”的口语化文字。
+小程序输出的数据与图表清单
+当果农输入上述打卡数据后，Python 触发后台 APSIM 跑一遍，提取生成的 .db 数据库文件，在小程序端呈现以下 4 个具体图表/数据面板：
+四、 敏捷研发计划与 AI 辅助开发策略
+本项目的核心系统（MVP版本）规划在 1 周内极速完成开发与联调，这主要得益于全流程引入Antiogracity编程智能体的辅助。
+在开发的前两天，将集中攻坚核心引擎的自动化。由开发人员向 AI 描述业务逻辑，AI 自动生成 Python 脚本以实现对 .apsimx 文件的精确解析、变量替换、Models.exe 的命令行驱动以及 SQLite 结果库的 SQL 读取。第三天利用 AI 快速生成 Flask 的数据接收与返回路由，打通后端。
+第四至第五天转战微信开发者工具，由 AI 辅助快速生成带有日期选择器和输入框的表单页面，并植入 ECharts 组件完成静态图表展示。最后两日进行局域网内的前后端接口联调，修复通信报错，并接入大语言模型 API，完成提示词工程的封装，最终输出可供答辩的完整演示系统。
+五、 竞赛核心竞争优势
+首先是技术壁垒，项目并未停留在常规的信息管理系统层面，而是引入了业内顶尖的机理模型作为内核，实现了基于物理与生物方程的严谨推演。其次是极高的场景契合度，微信小程序叠加 Windows 服务器与 SQLite 的轻量化组合，摒弃了华而不实的重型技术，契合农业领域尤其是下沉市场的真实落地需求。最后是前沿的 AI 融合应用，通过将机理模型的精准数据与大语言模型的文字生成能力相结合，打造了典型的 Agentic（智能体）工作流，生动诠释了“智慧农业数字化转型”的深刻内涵。
+======= MVP开发文档.docx =======
+咖啡数字孪生智能决策系统开发文档
+5天 MVP 版：微信小程序 + Flask 后端 + APSIM / HYDRUS / BEPS 三模型协同
+0. 系统整体文件结构
+coffee_digital_twin/
+│
+├─ miniprogram/                                      微信小程序前端【蔡济远】
+│  ├─ app.js                                        小程序入口逻辑【蔡济远】
+│  ├─ app.json                                      页面路由与全局配置【蔡济远】
+│  ├─ app.wxss                                      全局样式【蔡济远】
+│  │
+│  ├─ pages/
+│  │  ├─ index/                                     首页仪表盘【蔡济远】
+│  │  │  ├─ index.wxml
+│  │  │  ├─ index.wxss
+│  │  │  ├─ index.js
+│  │  │  └─ index.json
+│  │  │
+│  │  ├─ plotInit/                                  建园初始化页面【蔡济远】
+│  │  │  ├─ plotInit.wxml
+│  │  │  ├─ plotInit.wxss
+│  │  │  ├─ plotInit.js
+│  │  │  └─ plotInit.json
+│  │  │
+│  │  ├─ farmLog/                                   农事打卡页面【蔡济远】
+│  │  │  ├─ farmLog.wxml
+│  │  │  ├─ farmLog.wxss
+│  │  │  ├─ farmLog.js
+│  │  │  └─ farmLog.json
+│  │  │
+│  │  ├─ result/                                    模型结果展示页面【蔡济远】
+│  │  │  ├─ result.wxml
+│  │  │  ├─ result.wxss
+│  │  │  ├─ result.js
+│  │  │  └─ result.json
+│  │  │
+│  │  ├─ scenario/                                  情景模拟页面【蔡济远】
+│  │  │  ├─ scenario.wxml
+│  │  │  ├─ scenario.wxss
+│  │  │  ├─ scenario.js
+│  │  │  └─ scenario.json
+│  │  │
+│  │  └─ advice/                                    AI农技建议页面【蔡济远】
+│  │     ├─ advice.wxml
+│  │     ├─ advice.wxss
+│  │     ├─ advice.js
+│  │     └─ advice.json
+│  │
+│  ├─ components/
+│  │  ├─ status-card/                               当前咖啡状态卡片【蔡济远】
+│  │  ├─ chart-card/                                图表卡片组件【蔡济远】
+│  │  ├─ risk-badge/                                风险标签组件【蔡济远】
+│  │  └─ loading-panel/                             模型运行等待组件【蔡济远】
+│  │
+│  ├─ utils/
+│  │  ├─ request.js                                 wx.request 请求封装【蔡济远】
+│  │  ├─ config.js                                  后端地址配置【蔡济远】
+│  │  ├─ formatter.js                               单位换算与结果格式化【蔡济远】
+│  │  └─ storage.js                                 本地缓存封装【蔡济远】
+│  │
+│  └─ ec-canvas/                                    ECharts 微信小程序组件【蔡济远】
+│
+│
+├─ backend/                                         Flask 后端与模型调度服务【蔡济远总负责】
+│  ├─ app.py                                        Flask入口【蔡济远】
+│  ├─ config.py                                     路径、端口、模型参数配置【蔡济远】
+│  ├─ requirements.txt                              Python依赖【蔡济远】
+│  ├─ start_server.bat                              Windows一键启动脚本【蔡济远】
+│  │
+│  ├─ database/
+│  │  ├─ coffee_demo.db                             SQLite数据库【蔡济远】
+│  │  └─ init_db.py                                 初始化表结构【蔡济远】
+│  │
+│  ├─ api/
+│  │  ├─ plot_api.py                                建园接口【蔡济远】
+│  │  ├─ farmop_api.py                              农事打卡接口【蔡济远】
+│  │  ├─ model_api.py                               模型运行接口【蔡济远】
+│  │  ├─ result_api.py                              结果查询接口【蔡济远】
+│  │  └─ advice_api.py                              AI建议接口【蔡济远】
+│  │
+│  ├─ models/
+│  │  ├─ apsim_adapter.py                           APSIM适配器【蔡济远】
+│  │  ├─ hydrus_adapter.py                          HYDRUS适配器【张源皓】
+│  │  ├─ beps_adapter.py                            BEPS适配器【简光耀】
+│  │  └─ fusion_engine.py                           三模型结果融合【蔡济远】
+│  │
+│  ├─ templates/
+│  │  ├─ apsim/
+│  │  │  ├─ apsim_coffee_template.apsimx             APSIM咖啡模型模板【蔡济远】
+│  │  │  └─ apsim_weather_template.met               APSIM气象模板【蔡济远】
+│  │  │
+│  │  ├─ hydrus/
+│  │  │  ├─ hydrus_SELECTOR_template.IN              HYDRUS主控制模板【张源皓】
+│  │  │  ├─ hydrus_ATMOSPH_template.IN               HYDRUS大气边界模板【张源皓】
+│  │  │  └─ hydrus_PROFILE_template.DAT              HYDRUS土壤剖面模板【张源皓】
+│  │  │
+│  │  └─ beps/
+│  │     ├─ beps_config_template.json                BEPS配置模板【简光耀】
+│  │     └─ beps_weather_template.json               BEPS气象样例模板【简光耀】
+│  │
+│  ├─ runtime/
+│  │  ├─ apsim_runs/                                 APSIM每次运行目录【蔡济远】
+│  │  ├─ hydrus_runs/                                HYDRUS每次运行目录【张源皓】
+│  │  ├─ beps_runs/                                  BEPS每次运行目录【简光耀】
+│  │  └─ result_json/                                三模型融合结果JSON【蔡济远】
+│  │
+│  ├─ demo_data/
+│  │  ├─ apsim_result_demo.json                      APSIM兜底演示结果【蔡济远】
+│  │  ├─ hydrus_result_demo.json                     HYDRUS兜底演示结果【张源皓】
+│  │  ├─ beps_result_demo.json                       BEPS兜底演示结果【简光耀】
+│  │  └─ model_input_demo.json                       三模型统一输入样例【三人共同确认，蔡济远维护】
+│  │
+│  └─ services/
+│     ├─ llm_service.py                              大模型解释服务【蔡济远】
+│     ├─ weather_service.py                          气象样例数据服务【蔡济远】
+│     ├─ unit_convert.py                             单位换算服务【蔡济远】
+│     └─ risk_service.py                             综合风险判断服务【蔡济远】
+│
+│
+├─ server/                                          本地服务器部署文件【蔡济远总负责】
+│  ├─ deploy_readme.md                              本地部署说明【蔡济远】
+│  ├─ start_all.bat                                 一键启动后端服务【蔡济远】
+│  ├─ check_env.bat                                 检查Python、APSIM、HYDRUS路径【蔡济远】
+│  │
+│  ├─ apsim_engine/                                  APSIM本地运行环境【蔡济远】
+│  │  ├─ Models.exe                                  APSIM执行程序【蔡济远配置】
+│  │  └─ README_APSIM_PATH.txt                       APSIM路径说明【蔡济远】
+│  │
+│  ├─ hydrus_engine/                                 HYDRUS本地运行环境【张源皓提供，蔡济远部署】
+│  │  ├─ H1D_CALC.EXE                                HYDRUS-1D计算程序【张源皓】
+│  │  └─ README_HYDRUS_PATH.txt                      HYDRUS路径说明【张源皓】
+│  │
+│  ├─ logs/
+│  │  ├─ flask.log                                   Flask运行日志【蔡济远】
+│  │  ├─ apsim.log                                   APSIM运行日志【蔡济远】
+│  │  ├─ hydrus.log                                  HYDRUS运行日志【张源皓】
+│  │  └─ beps.log                                    BEPS运行日志【简光耀】
+│  │
+│  └─ backup/
+│     ├─ demo_video_data/                            演示用固定数据备份【三人共同确认】
+│     └─ final_result_json/                          最终演示结果备份【蔡济远】
+│
+│
+└─ docs/                                            项目文档与答辩材料【三人共同完成】
+   ├─ 开发文档.md                                   本文档【三人共同确认】
+   ├─ 接口字段说明.md                               前后端接口与模型接口说明【蔡济远维护】
+   ├─ APSIM模型说明.md                              APSIM咖啡模型说明【蔡济远】
+   ├─ HYDRUS模型说明.md                             HYDRUS土壤水分模型说明【张源皓】
+   ├─ BEPS模型说明.md                               BEPS生态扩展模型说明【简光耀】
+   ├─ 演示流程脚本.md                               比赛演示脚本【三人共同确认】
+   └─ 答辩问题准备.md                               可能被问到的问题与回答【三人共同准备】
+1. 整体技术路线图
+┌──────────────────────────────────────────────────────────────┐
+│                        果农微信小程序                         │
+│                        负责人：蔡济远                         │
+│                                                              │
+│  建园初始化 | 农事打卡 | 情景模拟 | 模型结果 | AI农技建议       │
+│                                                              │
+│  技术：微信小程序原生框架 + ECharts + wx.request              │
+└───────────────────────────────┬──────────────────────────────┘
+                                │
+                                │ HTTP / JSON
+                                ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     Flask 后端总控服务                        │
+│                     负责人：蔡济远                            │
+│                                                              │
+│  1. 接收小程序请求                                             │
+│  2. 保存地块与农事数据到 SQLite                                │
+│  3. 统一整理三模型输入 JSON                                    │
+│  4. 调用 APSIM / HYDRUS / BEPS 三个模型适配器                  │
+│  5. 融合模型结果                                               │
+│  6. 返回小程序图表数据与农技建议                               │
+└───────────────┬──────────────────────┬───────────────────────┘
+                │                      │
+                ▼                      ▼
+┌────────────────────────┐   ┌────────────────────────┐
+│ APSIM 咖啡机理模型      │   │ HYDRUS 土壤水分解释模型  │
+│ 负责人：蔡济远           │   │ 负责人：张源皓            │
+│                        │   │                        │
+│ .apsimx 模板            │   │ SELECTOR.IN             │
+│ Models.exe             │   │ ATMOSPH.IN              │
+│ SQLite / CSV 输出       │   │ NOD_INF.OUT             │
+│                        │   │ T_LEVEL.OUT             │
+└───────────┬────────────┘   └───────────┬────────────┘
+            │                            │
+            ▼                            ▼
+┌────────────────────────┐   ┌────────────────────────┐
+│ APSIM 输出 JSON         │   │ HYDRUS 输出 JSON        │
+│ 生育期 / 产量 / 水肥胁迫 │   │ 土壤剖面 / 根系吸水      │
+└───────────┬────────────┘   └───────────┬────────────┘
+            │                            │
+            └──────────────┬─────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   BEPS 区域生态扩展模型                       │
+│                   负责人：简光耀                              │
+│                                                              │
+│  BEPS-Lite：气象 + LAI/NDVI + 土壤水分 → GPP / NPP / ET / 碳汇 │
+└───────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     三模型结果融合层                          │
+│                     负责人：蔡济远                            │
+│                                                              │
+│  APSIM：咖啡长到什么阶段、产量多少、是否受水肥限制             │
+│  HYDRUS：土壤水在哪里、根有没有吸到水、是否需要灌溉             │
+│  BEPS：冠层长势如何、光合生产力如何、生态碳汇如何               │
+└───────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     小程序输出结果                            │
+│                     负责人：蔡济远                            │
+│                                                              │
+│  今日状态卡片 | 产量预测曲线 | 土壤水分剖面 | 根系胁迫表盘       │
+│  GPP/NPP/ET生态指标 | what/how/why 农技建议                    │
+└──────────────────────────────────────────────────────────────┘
+2. 果农在微信小程序中的输入与输出
+2.1 果农输入
+2.2 小程序输出
+3. 全组统一开发原则
+3.1 模型接口统一原则
+每个模型负责人只需要保证自己模块符合统一输入输出结构。
+输入：model_input.json
+输出：model_result.json
+形式：Python函数 / JSON文件 / 可被后端import的模块
+统一函数形式：
+run_apsim_model(model_input_json)  -> apsim_result_json
+run_hydrus_model(model_input_json) -> hydrus_result_json
+run_beps_model(model_input_json)   -> beps_result_json
+3.2 统一开发边界
+第一章 蔡济远负责内容
+前端微信小程序 + Flask 总控后端 + APSIM 模型相关
+蔡济远负责系统主干。核心目标是保证完整闭环跑通：
+小程序输入 → Flask接收 → SQLite保存 → 三模型调用 → 结果融合 → 小程序展示
+1.1 负责的技术内容
+1.1.1 微信小程序前端
+1.1.2 Flask 后端框架
+1.1.3 APSIM 模型适配
+1.2 蔡济远需要完成的前端页面
+miniprogram/pages/
+├─ index/              首页仪表盘【蔡济远】
+├─ plotInit/           建园初始化【蔡济远】
+├─ farmLog/            农事打卡【蔡济远】
+├─ result/             模型结果【蔡济远】
+├─ scenario/           情景模拟【蔡济远】
+└─ advice/             AI农技建议【蔡济远】
+1.3 前端页面功能要求
+1.4 蔡济远需要预留的 Flask 接口
+1.5 Flask 内部模型调用接口
+1.6 蔡济远需要模拟输入的数据：咖啡作物
+1.6.1 建园初始化输入
+{
+  "plot_id": "plot_001",
+  "crop": "coffee",
+  "coffee_variety": "云南小粒咖啡",
+  "plot_name": "潞江坝咖啡示范园",
+  "area_mu": 12.5,
+  "tree_age": 4,
+  "latitude": 24.93,
+  "longitude": 98.88,
+  "elevation_m": 850,
+  "soil_type": "赤红壤",
+  "shade_level": "中等遮阴",
+  "plant_density": 330,
+  "row_spacing_m": 2.0,
+  "plant_spacing_m": 1.5
+}
+1.6.2 APSIM 模型输入字段
+1.7 蔡济远需要输出给后端融合层的 APSIM 接口
+文件位置：
+backend/models/apsim_adapter.py
+接口形式：
+run_apsim_model(model_input_json) -> apsim_result_json
+APSIM 输出 JSON：
+{
+  "model": "APSIM-Coffee",
+  "status": "success",
+  "plot_id": "plot_001",
+  "stage": "果实膨大期",
+  "harvest_days": 45,
+  "yield_pred_kg_mu": 1350,
+  "yield_change_kg_mu": 150,
+  "water_stress": 0.32,
+  "nitrogen_status": "偏低",
+  "lai": 3.2,
+  "biomass_kg_ha": 6200,
+  "yield_curve": [
+    {
+      "date": "2026-04-29",
+      "yield_kg_mu": 1200
+    },
+    {
+      "date": "2026-05-06",
+      "yield_kg_mu": 1260
+    },
+    {
+      "date": "2026-05-13",
+      "yield_kg_mu": 1350
+    }
+  ],
+  "apsim_explain": {
+    "what": "咖啡处于果实膨大期，产量形成进入关键阶段。",
+    "why": "近期土壤水分下降，水分胁迫开始影响干物质积累。"
+  }
+}
+1.8 蔡济远 5天开发节点
+第二章 张源皓负责内容
+HYDRUS 土壤水分解释模型
+张源皓负责 HYDRUS 模型相关内容。目标是把咖啡园灌溉、降雨、土壤参数和根系参数转化为 HYDRUS 可用输入，并输出小程序能展示的土壤水分与根系吸水结果。
+2.1 负责的技术内容
+2.2 HYDRUS 在系统中的角色
+HYDRUS 不负责产量预测，主要负责解释土壤水分过程。
+HYDRUS 需要回答的问题：
+1. 水进入土壤了吗？
+2. 水进入多深？
+3. 主要根区有没有吸到水？
+4. 现在是真缺水，还是只是表层干？
+5. 是否需要灌溉？
+6. 灌溉后是否会出现深层渗漏？
+2.3 HYDRUS 与其他模型的关系
+2.4 张源皓需要模拟输入的数据：咖啡作物
+2.4.1 HYDRUS 输入 JSON
+{
+  "plot_id": "plot_001",
+  "crop": "coffee",
+  "soil_type": "赤红壤",
+  "simulation_days": 7,
+  "root_depth_cm": 70,
+  "soil_hydraulic_params": [
+    {
+      "layer": "0-10cm",
+      "theta_r": 0.059,
+      "theta_s": 0.333,
+      "alpha": 0.027,
+      "n": 1.38,
+      "ks_cm_day": 92.97,
+      "l": 0.5
+    },
+    {
+      "layer": "10-30cm",
+      "theta_r": 0.095,
+      "theta_s": 0.367,
+      "alpha": 0.034,
+      "n": 1.37,
+      "ks_cm_day": 98.33,
+      "l": 0.5
+    },
+    {
+      "layer": "30-50cm",
+      "theta_r": 0.091,
+      "theta_s": 0.314,
+      "alpha": 0.067,
+      "n": 1.48,
+      "ks_cm_day": 46.40,
+      "l": 0.5
+    }
+  ],
+  "initial_water_profile": [
+    {
+      "depth_cm": 10,
+      "theta": 0.24
+    },
+    {
+      "depth_cm": 20,
+      "theta": 0.22
+    },
+    {
+      "depth_cm": 40,
+      "theta": 0.19
+    },
+    {
+      "depth_cm": 60,
+      "theta": 0.17
+    },
+    {
+      "depth_cm": 100,
+      "theta": 0.15
+    }
+  ],
+  "atmospheric_boundary": [
+    {
+      "date": "2026-04-29",
+      "rain_mm": 0,
+      "irrigation_mm": 25,
+      "potential_evaporation_mm": 2.8,
+      "potential_transpiration_mm": 3.6
+    },
+    {
+      "date": "2026-04-30",
+      "rain_mm": 0,
+      "irrigation_mm": 0,
+      "potential_evaporation_mm": 2.9,
+      "potential_transpiration_mm": 3.7
+    }
+  ]
+}
+2.5 张源皓需要关注的咖啡参数
+2.6 张源皓需要产出的文件
+backend/models/
+└─ hydrus_adapter.py                              HYDRUS适配器【张源皓】
+backend/templates/hydrus/
+├─ hydrus_SELECTOR_template.IN                    HYDRUS主控制模板【张源皓】
+├─ hydrus_ATMOSPH_template.IN                     HYDRUS大气边界模板【张源皓】
+└─ hydrus_PROFILE_template.DAT                    HYDRUS土壤剖面模板【张源皓】
+backend/demo_data/
+└─ hydrus_result_demo.json                        HYDRUS兜底演示结果【张源皓】
+server/hydrus_engine/
+├─ H1D_CALC.EXE                                   HYDRUS计算程序【张源皓】
+└─ README_HYDRUS_PATH.txt                         HYDRUS路径说明【张源皓】
+2.7 HYDRUS 输出给后端的接口
+文件位置：
+backend/models/hydrus_adapter.py
+接口形式：
+run_hydrus_model(model_input_json) -> hydrus_result_json
+HYDRUS 输出 JSON：
+{
+  "model": "HYDRUS-1D",
+  "status": "success",
+  "plot_id": "plot_001",
+  "water_status": "中度干旱",
+  "root_uptake_ratio": 0.72,
+  "infiltration_depth_cm": 42,
+  "irrigation_effect": "灌溉水主要进入0-40cm根区",
+  "soil_profile_current": [
+    {
+      "depth_cm": 10,
+      "theta": 0.26,
+      "status": "适宜"
+    },
+    {
+      "depth_cm": 20,
+      "theta": 0.23,
+      "status": "略低"
+    },
+    {
+      "depth_cm": 40,
+      "theta": 0.19,
+      "status": "偏低"
+    },
+    {
+      "depth_cm": 60,
+      "theta": 0.17,
+      "status": "偏低"
+    },
+    {
+      "depth_cm": 100,
+      "theta": 0.14,
+      "status": "干旱"
+    }
+  ],
+  "soil_moisture_series": [
+    {
+      "date": "2026-04-29",
+      "d10": 0.26,
+      "d20": 0.23,
+      "d40": 0.19,
+      "d60": 0.17
+    },
+    {
+      "date": "2026-04-30",
+      "d10": 0.25,
+      "d20": 0.23,
+      "d40": 0.20,
+      "d60": 0.18
+    }
+  ],
+  "hydrus_explain": {
+    "what": "当前表层土壤水分略有恢复，但40cm以下仍偏低。",
+    "why": "本次灌溉水主要集中在0-40cm，深层根区补水不足。"
+  }
+}
+2.8 HYDRUS 给前端支撑的图表
+2.9 张源皓 5天开发节点
+第三章 简光耀负责内容
+BEPS 区域生态扩展模型
+简光耀负责 BEPS 生态扩展模型。5天 MVP 阶段采用 BEPS-Lite 方案，重点输出咖啡园冠层长势、GPP、NPP、ET、碳汇和生态风险。
+3.1 负责的技术内容
+3.2 BEPS 在系统中的角色
+BEPS-Lite 的定位：
+不负责单独预测产量；
+不负责土壤剖面水分；
+主要负责生态生产力、冠层长势和碳汇指标。
+3.3 简光耀需要模拟输入的数据：咖啡作物
+3.3.1 BEPS 输入 JSON
+{
+  "plot_id": "plot_001",
+  "crop": "coffee",
+  "latitude": 24.93,
+  "longitude": 98.88,
+  "elevation_m": 850,
+  "tree_age": 4,
+  "shade_level": "中等遮阴",
+  "canopy_cover": 0.72,
+  "lai": 3.2,
+  "ndvi": 0.78,
+  "soil_water_ratio": 0.72,
+  "weather_series": [
+    {
+      "date": "2026-04-29",
+      "tavg": 24.5,
+      "tmax": 30.2,
+      "tmin": 18.6,
+      "radiation_mj": 18.5,
+      "rain_mm": 0,
+      "vpd_kpa": 1.2,
+      "wind_m_s": 1.5
+    },
+    {
+      "date": "2026-04-30",
+      "tavg": 25.1,
+      "tmax": 31.0,
+      "tmin": 19.0,
+      "radiation_mj": 19.1,
+      "rain_mm": 0,
+      "vpd_kpa": 1.3,
+      "wind_m_s": 1.6
+    }
+  ]
+}
+3.4 简光耀需要关注的字段
+3.5 简光耀需要产出的文件
+backend/models/
+└─ beps_adapter.py                                BEPS适配器【简光耀】
+backend/templates/beps/
+├─ beps_config_template.json                      BEPS配置模板【简光耀】
+└─ beps_weather_template.json                     BEPS气象模板【简光耀】
+backend/demo_data/
+└─ beps_result_demo.json                          BEPS兜底演示结果【简光耀】
+server/logs/
+└─ beps.log                                       BEPS运行日志【简光耀】
+3.6 BEPS 输出给后端的接口
+文件位置：
+backend/models/beps_adapter.py
+接口形式：
+run_beps_model(model_input_json) -> beps_result_json
+BEPS 输出 JSON：
+{
+  "model": "BEPS-Lite",
+  "status": "success",
+  "plot_id": "plot_001",
+  "growth_score": 78.5,
+  "canopy_status": "长势正常但受轻度水分限制",
+  "gpp_today": 8.6,
+  "npp_today": 4.1,
+  "et_today": 3.2,
+  "carbon_sink_kgC_mu": 1.93,
+  "beps_risk": "中等",
+  "gpp_series": [
+    {
+      "date": "2026-04-29",
+      "gpp": 8.6
+    },
+    {
+      "date": "2026-04-30",
+      "gpp": 8.2
+    },
+    {
+      "date": "2026-05-01",
+      "gpp": 7.9
+    }
+  ],
+  "npp_series": [
+    {
+      "date": "2026-04-29",
+      "npp": 4.1
+    },
+    {
+      "date": "2026-04-30",
+      "npp": 3.9
+    },
+    {
+      "date": "2026-05-01",
+      "npp": 3.7
+    }
+  ],
+  "et_series": [
+    {
+      "date": "2026-04-29",
+      "et": 3.2
+    },
+    {
+      "date": "2026-04-30",
+      "et": 3.4
+    },
+    {
+      "date": "2026-05-01",
+      "et": 3.6
+    }
+  ],
+  "beps_explain": {
+    "what": "当前咖啡园冠层光合生产力处于中等偏上水平。",
+    "why": "辐射条件较好，但土壤水分限制使GPP略有下降。"
+  }
+}
+3.7 BEPS 给前端支撑的图表
+3.8 简光耀 5天开发节点
+第四章 三人统一数据协议
+4.1 三模型统一输入 JSON
+蔡济远在 Flask 中生成统一输入，传给 APSIM、HYDRUS、BEPS 三个模型。
+{
+  "task_id": "task_001",
+  "plot_id": "plot_001",
+  "crop": "coffee",
+  "plot_info": {
+    "plot_name": "潞江坝咖啡示范园",
+    "area_mu": 12.5,
+    "tree_age": 4,
+    "coffee_variety": "云南小粒咖啡",
+    "latitude": 24.93,
+    "longitude": 98.88,
+    "elevation_m": 850,
+    "soil_type": "赤红壤",
+    "shade_level": "中等遮阴"
+  },
+  "weather_series": [
+    {
+      "date": "2026-04-29",
+      "tmax": 30.2,
+      "tmin": 18.6,
+      "tavg": 24.5,
+      "rain_mm": 0,
+      "radiation_mj": 18.5,
+      "vpd_kpa": 1.2,
+      "wind_m_s": 1.5
+    }
+  ],
+  "farm_operations": [
+    {
+      "op_type": "irrigation",
+      "date": "2026-04-29",
+      "amount": 25,
+      "unit": "mm"
+    },
+    {
+      "op_type": "fertilization",
+      "date": "2026-04-29",
+      "fertilizer_type": "尿素",
+      "amount": 10,
+      "unit": "kg/mu"
+    }
+  ],
+  "scenario": {
+    "scenario_name": "当前管理方案",
+    "extra_irrigation_mm": 0,
+    "extra_fertilizer_kg_mu": 0
+  }
+}
+4.2 三模型统一输出结构
+{
+  "task_id": "task_001",
+  "plot_id": "plot_001",
+  "status": "success",
+  "dashboard": {
+    "stage": "果实膨大期",
+    "harvest_days": 45,
+    "yield_pred_kg_mu": 1350,
+    "risk_level": "中等",
+    "growth_score": 78.5
+  },
+  "apsim": {
+    "model": "APSIM-Coffee",
+    "stage": "果实膨大期",
+    "harvest_days": 45,
+    "yield_pred_kg_mu": 1350,
+    "water_stress": 0.32,
+    "nitrogen_status": "偏低",
+    "yield_curve": []
+  },
+  "hydrus": {
+    "model": "HYDRUS-1D",
+    "water_status": "中度干旱",
+    "root_uptake_ratio": 0.72,
+    "soil_profile_current": [],
+    "soil_moisture_series": []
+  },
+  "beps": {
+    "model": "BEPS-Lite",
+    "growth_score": 78.5,
+    "gpp_today": 8.6,
+    "npp_today": 4.1,
+    "et_today": 3.2,
+    "carbon_sink_kgC_mu": 1.93,
+    "gpp_series": [],
+    "npp_series": [],
+    "et_series": []
+  },
+  "advice": {
+    "what": "当前咖啡处于果实膨大期，产量形成进入关键阶段。",
+    "how": "建议未来2天内补充滴灌，每亩约2吨水，施肥暂缓。",
+    "why": "APSIM判断产量形成期受水分限制，HYDRUS显示40cm以下根区偏干，BEPS显示冠层光合生产力开始下降。"
+  }
+}
+第五章 5天开发排期
+Day 1：统一协议与工程骨架
+Day 2：假数据跑通
+Day 3：模型适配器成型
+Day 4：三模型融合与小程序展示
+Day 5：部署与答辩包装
+第六章 本地服务器部署要求
+6.1 部署结构
+Windows 本地服务器 / 演示笔记本
+│
+├─ Python 3.10+
+│
+├─ backend/
+│  ├─ app.py
+│  ├─ config.py
+│  ├─ database/coffee_demo.db
+│  ├─ models/
+│  │  ├─ apsim_adapter.py
+│  │  ├─ hydrus_adapter.py
+│  │  ├─ beps_adapter.py
+│  │  └─ fusion_engine.py
+│  ├─ runtime/
+│  └─ demo_data/
+│
+├─ APSIM
+│  └─ Models.exe
+│
+├─ HYDRUS
+│  └─ H1D_CALC.EXE
+│
+├─ BEPS-Lite
+│  └─ beps_adapter.py
+│
+└─ 微信开发者工具
+   └─ 小程序访问 http://本机局域网IP:5000
+6.2 Flask 启动要求
+6.3 本地部署负责人
+第七章 最终验收标准
+第八章 最终系统表述
+本系统采用微信小程序作为果农入口，Flask 作为本地模型调度后端，APSIM 作为咖啡生长与产量预测主模型，HYDRUS 作为土壤水分与根系吸水解释模型，BEPS-Lite 作为区域生态过程扩展模型。三类模型统一输出 JSON，由后端融合后返回小程序，最终形成果农能理解的 what、how、why 农技建议。

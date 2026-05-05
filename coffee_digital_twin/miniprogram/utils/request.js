@@ -7,7 +7,7 @@ function request(options) {
       url,
       method: options.method || 'GET',
       data: options.data || {},
-      timeout: options.timeout || 10000,
+      timeout: options.timeout || 60000,
       header: {
         'content-type': 'application/json'
       },

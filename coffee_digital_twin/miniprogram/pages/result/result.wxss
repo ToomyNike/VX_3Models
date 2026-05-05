@@ -13,3 +13,192 @@
 .card-wrap {
   margin-bottom: 18rpx;
 }
+
+/* ─── 三模型机理解释区域 ─── */
+.mechanism-header {
+  margin-bottom: 24rpx;
+}
+.mechanism-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a3d2b;
+  margin-bottom: 6rpx;
+}
+.mechanism-sub {
+  font-size: 22rpx;
+  color: #888;
+}
+
+.mechanism-card {
+  border-radius: 20rpx;
+  padding: 28rpx 28rpx 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.07);
+}
+.apsim-card  { background: #f0faf4; border-left: 6rpx solid #2d9c5e; }
+.hydrus-card { background: #f0f6ff; border-left: 6rpx solid #2d6bc4; }
+.beps-card   { background: #f5f0ff; border-left: 6rpx solid #7c3aed; }
+
+.mech-card-head {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.mech-icon {
+  font-size: 44rpx;
+  flex-shrink: 0;
+}
+.mech-card-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a2d3b;
+  line-height: 1.4;
+}
+.mech-card-layer {
+  font-size: 22rpx;
+  color: #888;
+  margin-top: 2rpx;
+}
+.mech-card-summary {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.7;
+  margin-bottom: 18rpx;
+}
+
+.mech-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+.mech-metric-item {
+  background: rgba(255,255,255,0.8);
+  border-radius: 12rpx;
+  padding: 10rpx 18rpx;
+  min-width: 120rpx;
+  text-align: center;
+}
+.mech-metric-label {
+  font-size: 20rpx;
+  color: #888;
+  margin-bottom: 4rpx;
+}
+.mech-metric-val {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #1a2d3b;
+}
+
+/* 综合判断 */
+.integrated-reason {
+  background: #fffbeb;
+  border: 2rpx solid #f59e0b;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 8rpx;
+}
+.integrated-label {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 10rpx;
+}
+.integrated-text {
+  font-size: 26rpx;
+  color: #451a03;
+  line-height: 1.8;
+}
+
+/* ─── 模型说明区域 ─── */
+.model-info-section { margin-top: 8rpx; }
+.model-info-card {
+  background: #fff;
+  border-radius: 18rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+}
+.model-info-head {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 12rpx;
+}
+.model-info-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a3d2b;
+}
+.model-info-layer {
+  font-size: 22rpx;
+  color: #888;
+}
+.model-info-explains {
+  font-size: 25rpx;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 14rpx;
+}
+.model-info-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+.model-tag {
+  background: #e8f5ee;
+  color: #1a6b3c;
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+}
+
+/* ─── 示范验证案例 ─── */
+.validation-section { margin-top: 8rpx; }
+.validation-card {
+  background: #fff;
+  border-radius: 18rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  border-left: 6rpx solid #10b981;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+}
+.validation-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+.validation-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a3d2b;
+  flex: 1;
+}
+.validation-badge {
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 22rpx;
+  padding: 6rpx 18rpx;
+  border-radius: 100rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.validation-scenario {
+  font-size: 24rpx;
+  color: #555;
+  margin-bottom: 6rpx;
+  line-height: 1.6;
+}
+.validation-expected {
+  font-size: 24rpx;
+  color: #1a6b3c;
+  margin-bottom: 6rpx;
+  line-height: 1.6;
+}
+.validation-expert {
+  font-size: 23rpx;
+  color: #888;
+  line-height: 1.6;
+  font-style: italic;
+}
